@@ -4,11 +4,18 @@
  */
 // 設定ファイル情報
 var appsettings;
-// 歌詞情報
+// 歌詞ファイル情報
 var csvData;
-const quizzesLength = 10;  // 問題数
-const choiceLength  = 5;  // 選択肢数
-
+// クイズ
+var quizzes;
+// 現在のクイズインデックス
+var currentQuizIndex = 0;
+// 画面表示モード
+const display = {
+    TOP: 1,
+    QUIZ: 2,
+    RESULT: 3,
+};
 
 /**
  * 【イベント処理】
@@ -16,20 +23,33 @@ const choiceLength  = 5;  // 選択肢数
 // 1. 画面表示
 $(document).ready(async function(){
     try {
-        // ①設定ファイル読み込み
+        // 1. 設定ファイル読み込み
         appsettings = await getJsonData('appsettings.json');
 
-        // ②歌詞情報読み込み
-        await fetchCsvData(appsettings.lyricsFileName);
+        // 2. 歌詞情報読み込み
+        csvData = await fetchCsvData();
 
-        // ③クイズ作成
-        var a = createQuizzes();
-        console.log(a);
+        // 3. クイズ作成
+        quizzes = createQuizzes();
+
+        // 4. 開始画面を表示
+        createDisplay(display.TOP);
     } catch (error) {
         // エラーハンドリング
         console.error('Failed to load data:', error);
     }
 });
+
+// 2. クイズ読込
+function loadQuiz() {
+    try {
+        // クイズ画面を表示
+        createDisplay(display.QUIZ);
+    } catch (error) {
+        // エラーハンドリング
+        console.error('Failed to load quiz:', error);
+    }
+}
 
 /**
  * 【Sub関数】
@@ -46,11 +66,11 @@ function getJsonData(jsonUrl) {
 }
 
 // CSVデータを取得する関数
-async function fetchCsvData(csvUrl) {
+async function fetchCsvData() {
     try {
-        const response = await fetch(csvUrl);
+        const response = await fetch(appsettings.lyricsFileName);
         const text = await response.text();
-        csvData = parseCsv(text); // グローバル変数にCSVデータを格納
+        return parseCsv(text);
     } catch (error) {
         throw new Error('Failed to load CSV file');
     }
@@ -94,25 +114,28 @@ function createQuizzes(){
     const songs = csvData[appsettings.songNameLine];
     // 全歌詞取得
     const lyrics = csvData.splice(appsettings.lyricsStartLine);
+    // 問題数取得
+    const quizzesLength = getOrSetCookie("quizzesLength", appsettings.quizzesLengthDefaultValue)
+    // 選択肢数取得
+    const choiceLength  = getOrSetCookie("choiceLength", appsettings.choiceLengthDefaultValue)
 
     // 正常に処理できるかチェック
     if(!appsettings.allowSameSong && songs.length < quizzesLength){
-        throw new Error('全曲数：' + songs.length + '曲です。問題の重複を認めない設定(appsettings.allowSameSong=' + appsettings.allowSameSong + ')で' +
-                        quizzesLength + '曲の問題は作れません。');
+        throw new Error('全曲数' + songs.length + '曲です。問題の重複を認めない設定で' + quizzesLength + '曲の問題は作れません。');
     }
     if(songs.length < choiceLength){
-        throw new Error('全曲数：' + songs.length + '曲です。' + choiceLength + 'の選択肢は作れません。');
+        throw new Error('全曲数' + songs.length + '曲です。' + choiceLength + 'の選択肢は作れません。');
     }
 
     // 各変数初期化
     // 問題歌詞リスト
-    const quizzes = [];
+    let questions = [];
     // 正解曲リスト
-    const songList = [];
+    let songList = [];
     // 選択肢リスト(2次元配列)
-    const choices = [[]];
+    let choices = [[]];
     // 正解選択肢リスト
-    const correctAnswers = [];
+    let correctAnswers = [];
 
     // 問題数分処理する
     for(let i = 0; i < quizzesLength; i++){
@@ -173,18 +196,18 @@ function createQuizzes(){
             const lyric = lyrics[lyricsIndex][songIndex];
 
             // 問題文が取得でき、被っていない場合歌詞決定
-            if(lyric !== "" && (appsettings.allowSameSong || !quizzes.includes(lyric))) {
-                quizzes.push(lyric);
+            if(lyric !== "" && (appsettings.allowSameSong || !questions.includes(lyric))) {
+                questions.push(lyric);
                 break;
             }
         }
     }
 
     // 戻り値作成
-    return quizzes.map((quiz, index) => ({
-        text: quiz,
+    return questions.map((question, index) => ({
+        question: question,
         correctAnswer: correctAnswers[index],
-        choises: choices[index]
+        choices: choices[index]
     }));
 }
 
@@ -198,3 +221,67 @@ function shuffle(array){
     }
     return result;
 }
+
+// クッキー検索、なければ設定
+function getOrSetCookie(name, defaultValue) {
+    // クッキーの文字列を取得
+    var cookies = document.cookie.split(';');
+
+    // 各クッキーをループして指定された名前のクッキーを探す
+    for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i].trim();
+
+        // クッキーが指定された名前を持っているかどうかを確認
+        if (cookie.startsWith(name + '=')) {
+            // 指定された名前のクッキーが見つかったら、その値を返す
+            return cookie.substring(name.length + 1);
+        }
+    }
+
+    // 指定された名前のクッキーが見つからなかった場合はデフォルト値を設定して返す
+    var newCookie = name + '=' + defaultValue;
+    document.cookie = newCookie;
+    return defaultValue;
+}
+
+// 画面タグ作成
+function createDisplay(mode){
+    // タグクリア
+    $('#display').empty();
+
+    // 変数初期化
+    var tag = "";
+
+    // タグ作成
+    if (mode === display.TOP) {
+        // TOP画面の場合
+        tag = '<p class="text-align-center" style="font-size: 1.4em">全' + quizzes.length + '問です！</p>' +
+                '<button' +
+                '  onclick="loadQuiz()"' +
+                '  class="btn btn--purple btn--radius btn--cubic bottom-button"' +
+                '>' +
+                '  START' +
+                '</button>';
+    } else if (mode === display.QUIZ){
+        // QUIZ画面の場合
+        if (quizzes[currentQuizIndex + 1]){
+            // 次の問題がある場合
+            currentQuizIndex++;
+
+        } else {
+            // 最後の問題の場合
+        }
+
+    }
+
+    // タグ流し込み
+    $('#display').append(tag);
+}
+
+
+// // 画面表示制御
+// function display(dispName){
+//     $('[name="display"]').each(function(){
+//         $(this).attr('id') === dispName ? $(this).show() : $(this).hide();
+//     });
+// }

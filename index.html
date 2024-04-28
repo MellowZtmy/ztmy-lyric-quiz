@@ -2,28 +2,14 @@
 <meta http-equiv="content-type" charset="utf-8" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="main.js"></script>
+<link rel="stylesheet" href="styles.css" />
 <html>
   <head>
     <title>ZTMY歌詞クイズ</title>
   </head>
   <body>
-    <h1>クイズアプリを作ってみよう！！！</h1>
-    <!--クイズのの表示-->
-    <h2 id="_question">ここに問題が表示されます。</h2>
-    <!--回答-->
-    <ul>
-      <li id="_ans1">回答１</li>
-      <li id="_ans2">回答２</li>
-      <li id="_ans3">回答３</li>
-    </ul>
-    <button type="button" id="_answer_1" onclick="Answer_Check(1)">
-      回答1
-    </button>
-    <button type="button" id="_answer_2" onclick="Answer_Check(2)">
-      回答2
-    </button>
-    <button type="button" id="_answer_3" onclick="Answer_Check(3)">
-      回答3
-    </button>
+    <h1 class="text-align-center">ZTMY歌詞クイズ</h1>
+    <!--画面表示-->
+    <div id="display"></div>
   </body>
 </html>
