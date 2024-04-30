@@ -61,14 +61,11 @@
     border-radius:100vh;
   }
 
-  .bottom-button{
-    /* bottom: 50px; */
-  }
-
   /* ラジオボタン用CSS */
   input[type=radio] {
     display: none; /* ラジオボタンを非表示にする */
   }
+
   .radio-label {
     display: block; /* ブロックレベル要素化する */
     line-height: 45px; /* 行の高さを指定する */
