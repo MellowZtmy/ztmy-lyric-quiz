@@ -59,7 +59,7 @@ button.btn {
   letter-spacing: 0.1em;
   color: #212529;
   border-radius: 0.5rem;
-  margin: 0 auto;
+  margin: 20px auto auto auto;
 }
 
 .btn--purple, a.btn--purple, button.btn--purple{
