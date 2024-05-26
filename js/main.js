@@ -246,15 +246,14 @@ function createDisplay(mode) {
   // タグ作成
   if (mode === display.TOP) {
     // TOP画面の場合
+    tag +=
+      '<div id="version" class="right-text">' + appsettings.version + "</div>";
     tag += "<button";
     tag += '  onclick="loadQuiz(true)"';
     tag += '  class="btn btn--purple btn--radius btn--cubic bottom-button"';
     tag += ">";
     tag += "  START";
     tag += "</button>";
-
-    // バージョン表示
-    $("#version").append(appsettings.version);
   } else if (mode === display.QUIZ) {
     // QUIZ画面の場合
     var quiz = quizzes[currentQuizIndex];
@@ -283,11 +282,6 @@ function createDisplay(mode) {
       tag += " ";
     });
 
-    tag += " <!-- 正解 or 不正解の表示 -->";
-    tag +=
-      ' <div id="correct" style="color: green; font-size: 2.0em;" class="center-text" hidden>GREAT！！</div>';
-    tag +=
-      ' <div id="incorrect" style="color: red; font-size: 2.0em;" class="center-text" hidden>MISS！</div>';
     tag += " ";
     tag += " <!-- 次へ / 終了 ボタン -->";
     tag +=
@@ -306,6 +300,8 @@ function createDisplay(mode) {
     tag += " ";
     tag +=
       ' <button id="retry" onclick="loadQuiz(true)" class="btn btn--purple btn--radius btn--cubic">RETRY</button>';
+    tag +=
+      ' <button id="top" onclick="createDisplay(display.TOP)" class="btn btn--purple btn--radius btn--cubic">TOP</button>';
   }
 
   // タグ流し込み
