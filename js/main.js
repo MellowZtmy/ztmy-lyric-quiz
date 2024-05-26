@@ -14,9 +14,15 @@ const display = {
 // クイズ
 var quizzes;
 // 現在のクイズインデックス
-var currentQuizIndex = 0;
+var currentQuizIndex;
+// 現在のスコア
+var score;
+// 現在の連続正解数
+var combo;
+// 最大スコア
+var maxScore;
 // クイズ結果
-var resultList = [];
+var resultList;
 
 /**
  * 【イベント処理】
@@ -30,24 +36,27 @@ $(document).ready(async function () {
     // 2. 歌詞情報読み込み
     csvData = await fetchCsvData();
 
-    // 3. クイズ作成
-    quizzes = createQuizzes();
-
-    // 4. 開始画面を表示
+    // 3. 開始画面を表示
     createDisplay(display.TOP);
   } catch (error) {
     // エラーハンドリング
-    console.error("Failed to load data:", error);
+    showError("Failed to load data:", error);
   }
 });
 
 // 2. クイズ読込
-function loadQuiz(isRetry = false) {
+function loadQuiz(isInit = false) {
   try {
     // 再開の場合
-    if (isRetry) {
+    if (isInit) {
       // 現在の問題初期化
       currentQuizIndex = 0;
+      // スコア初期化
+      score = 0;
+      // 最大スコア初期化
+      maxScore = 0;
+      //連続正解数初期化
+      combo = 0;
       // 結果初期化
       resultList = [];
       // クイズ作成
@@ -58,7 +67,7 @@ function loadQuiz(isRetry = false) {
     createDisplay(display.QUIZ);
   } catch (error) {
     // エラーハンドリング
-    console.error("Failed to load quiz:", error);
+    showError("Failed to load quiz:", error);
   }
 }
 
@@ -71,6 +80,24 @@ function onSelect(selected) {
 
     // 結果保持
     resultList.push(isCorrect);
+
+    // スコア設定
+    if (isCorrect) {
+      //連続正解数加算
+      combo++;
+      // 正解の場合スコア加算
+      score += appsettings.pointPerQuiz * combo;
+    } else {
+      //連続正解数初期化
+      combo = 0;
+      // 正解の場合スコア減算
+      score -= appsettings.pointPerQuiz * appsettings.penaltyRate;
+      // スコアがマイナスになった場合0にする
+      if (score < 0) score = 0;
+    }
+
+    // 最大スコア設定
+    maxScore += appsettings.pointPerQuiz * (currentQuizIndex + 1);
 
     // ラジオボタン非活性、色変え
     $('[name="choices"]').prop("disabled", true);
@@ -100,7 +127,7 @@ function onSelect(selected) {
     }
   } catch (error) {
     // エラーハンドリング
-    console.error("Failed to show select:", error);
+    showError("Failed to show select:", error);
   }
 }
 
@@ -109,9 +136,16 @@ function showResult() {
   try {
     // クイズ画面を表示
     createDisplay(display.RESULT);
+
+    // ハイスコア格納
+    var highScore = getCookie(appsettings.cookieName.highScore);
+    if (!highScore || highScore < score) {
+      // クッキーにハイスコアがない、またはクッキーのハイスコアを上回った時格納
+      setCookie(appsettings.cookieName.highScore, score);
+    }
   } catch (error) {
     // エラーハンドリング
-    console.error("Failed to result select:", error);
+    showError("Failed to result select:", error);
   }
 }
 
@@ -125,15 +159,9 @@ function createQuizzes() {
   // 全歌詞取得
   const lyrics = csvData.slice(appsettings.lyricsStartLine);
   // 問題数取得
-  const quizzesLength = getOrSetCookie(
-    "quizzesLength",
-    appsettings.quizzesLengthDefaultValue
-  );
+  const quizzesLength = appsettings.quizzesLength;
   // 選択肢数取得
-  const choiceLength = getOrSetCookie(
-    "choiceLength",
-    appsettings.choiceLengthDefaultValue
-  );
+  const choiceLength = appsettings.choiceLength;
 
   // 正常に処理できるかチェック
   if (!appsettings.allowSameSong && songs.length < quizzesLength) {
@@ -249,23 +277,25 @@ function createDisplay(mode) {
 
   // 変数初期化
   var tag = "";
-  var quiz = quizzes[currentQuizIndex];
 
   // タグ作成
   if (mode === display.TOP) {
     // TOP画面の場合
-    tag +=
-      '<p class="text-align-center" style="font-size: 1.4em">全' +
-      quizzes.length +
-      "問です！</p>";
     tag += "<button";
-    tag += '  onclick="loadQuiz()"';
+    tag += '  onclick="loadQuiz(true)"';
     tag += '  class="btn btn--purple btn--radius btn--cubic bottom-button"';
     tag += ">";
     tag += "  START";
     tag += "</button>";
+
+    // バージョン表示
+    $("#version").append(appsettings.version);
   } else if (mode === display.QUIZ) {
     // QUIZ画面の場合
+    var quiz = quizzes[currentQuizIndex];
+    // TODO 削除 tag += " <!-- スコア -->";
+    // TODO 削除 tag += ' <h2 class="right-text">' + score + " pt</h2>";
+    tag += " ";
     tag += " <!-- 問題番号 -->";
     tag += " <h2>Question. " + (currentQuizIndex + 1) + "</h2>";
     tag += " ";
@@ -273,7 +303,7 @@ function createDisplay(mode) {
     tag += ' <p style="font-size: 1.5em;">『' + quiz.question + "』</p>";
     tag += " ";
     tag += " <!-- 選択肢のラジオボタン + ラベル -->";
-    quiz.choices.forEach((choice, index, array) => {
+    quiz.choices.forEach((choice, index) => {
       tag += "   <label";
       tag += '     class="radio-label"';
       tag += '     style="display: block; font-size: 1.2em;"';
@@ -292,9 +322,9 @@ function createDisplay(mode) {
 
     tag += " <!-- 正解 or 不正解の表示 -->";
     tag +=
-      ' <span id="correct" style="color: green; font-size: 2.0em;" class="text-align-center" hidden>GREAT！！</span>';
+      ' <div id="correct" style="color: green; font-size: 2.0em;" class="center-text" hidden>GREAT！！</div>';
     tag +=
-      ' <span id="incorrect" style="color: red; font-size: 2.0em;" class="text-align-center" hidden>MISS！</span>';
+      ' <div id="incorrect" style="color: red; font-size: 2.0em;" class="center-text" hidden>MISS！</div>';
     tag += " ";
     tag += " <!-- 次へ / 終了 ボタン -->";
     tag +=
@@ -303,19 +333,12 @@ function createDisplay(mode) {
       '   <button id="result" onclick="showResult()" class="btn btn--purple btn--radius btn--cubic" style="display: none;">RESULT</button>';
   } else if (mode === display.RESULT) {
     // RESULT画面
-    // 正解数集計
-    var correctCount = 0;
-    resultList.forEach(function (element) {
-      if (element) correctCount++;
-    });
-
-    // 「正解」の後につける文字
+    // TODO 削除 tag += ' <h2 class="center-text">' + score + "pt / " + maxScore + "pt</h2>";
     tag +=
-      ' <h2 class="text-align-center">' +
-      "Result： " +
-      correctCount +
+      ' <h2 class="center-text">' +
+      resultList.filter((element) => element).length +
       " / " +
-      quizzes.length +
+      resultList.length +
       "</h2>";
     tag += " ";
     tag += " ";

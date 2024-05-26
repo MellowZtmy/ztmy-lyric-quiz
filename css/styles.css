@@ -1,87 +1,98 @@
-  /* 背景用CSS */
-  body {
-    background-color: #9932cc;
-  }
+/* 背景用CSS */
+body {
+  background-color: #9932cc;
+}
 
-  /* フォント用CSS */
-  *{
-    font-family:"ＭＳ Ｐゴシック",sans-serif;
-  }
+/* フォント用CSS */
+*{
+  font-family:"ＭＳ Ｐゴシック",sans-serif;
+}
 
-  /* テキスト用CSS */
-  .text-align-center{
+/* テキスト用CSS */
+.center-text {
     text-align: center;
-  }
+    flex-grow: 1;
+}
 
-  /* ボタン用CSS */
-  *,
-  *:before,
-  *:after {
-    -webkit-box-sizing: inherit;
-    box-sizing: inherit;
-  }
+.right-text {
+    text-align: right;
+}
 
-  html {
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    /* font-size: 62.5%;rem算出をしやすくするために */
-  }
+h1 {
+  padding: 1rem 2rem;
+  border-top: 3px solid #000;
+  border-bottom: 3px solid #000;
+}
 
-  .btn,
-  a.btn,
-  button.btn {
-    font-size: 1.6rem;
-    font-weight: 700;
-    line-height: 1.5;
-    position: relative;
-    display: block;
-    padding: 1rem 4rem;
-    cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    -webkit-transition: all 0.3s;
-    transition: all 0.3s;
-    text-align: center;
-    vertical-align: middle;
-    text-decoration: none;
-    letter-spacing: 0.1em;
-    color: #212529;
-    border-radius: 0.5rem;
-    margin: 0 auto;
-  }
+/* ボタン用CSS */
+*,
+*:before,
+*:after {
+  -webkit-box-sizing: inherit;
+  box-sizing: inherit;
+}
 
-  .btn--purple, a.btn--purple, button.btn--purple{
-    color:#fff;
-    background-color:#5f52a0;
-  }
+html {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  /* font-size: 62.5%;rem算出をしやすくするために */
+}
 
-  .btn--radius, a.btn--radius, button.btn--radius{
-    border-radius:100vh;
-  }
+.btn,
+a.btn,
+button.btn {
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.5;
+  position: relative;
+  display: block;
+  padding: 1rem 4rem;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  letter-spacing: 0.1em;
+  color: #212529;
+  border-radius: 0.5rem;
+  margin: 0 auto;
+}
 
-  /* ラジオボタン用CSS */
-  input[type=radio] {
-    display: none; /* ラジオボタンを非表示にする */
-  }
+.btn--purple, a.btn--purple, button.btn--purple{
+  color:#fff;
+  background-color:#5f52a0;
+}
 
-  .radio-label {
-    display: block; /* ブロックレベル要素化する */
-    line-height: 45px; /* 行の高さを指定する */
-    height: 50px; /* ボックスの高さを指定する */
-    padding-left: 20px; /* ボックス内左側の余白を指定する */
-    padding-right: 5px; /* ボックス内御右側の余白を指定する */
-    border: 2px solid black;/* ボックスの境界線を実線で指定する */
-    border-radius: 25px; /* 角丸を指定する */
-  }
+.btn--radius, a.btn--radius, button.btn--radius{
+  border-radius:100vh;
+}
 
-  .label-correct {
-    color: #0f5132;
-    background-color: #d1e7dd;
-  }
+/* ラジオボタン用CSS */
+input[type=radio] {
+  display: none; /* ラジオボタンを非表示にする */
+}
 
-  .label-incorrect {
-    color: #FF0000;
-    background-color: #F6CEEC;
-  }
+.radio-label {
+  display: block; /* ブロックレベル要素化する */
+  line-height: 45px; /* 行の高さを指定する */
+  height: 50px; /* ボックスの高さを指定する */
+  padding-left: 20px; /* ボックス内左側の余白を指定する */
+  padding-right: 5px; /* ボックス内御右側の余白を指定する */
+  border: 2px solid black;/* ボックスの境界線を実線で指定する */
+  border-radius: 25px; /* 角丸を指定する */
+}
+
+.label-correct {
+  color: #0f5132;
+  background-color: #d1e7dd;
+}
+
+.label-incorrect {
+  color: #FF0000;
+  background-color: #F6CEEC;
+}

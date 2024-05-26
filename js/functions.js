@@ -63,8 +63,8 @@ function shuffle(array) {
   return result;
 }
 
-// クッキー検索、なければ設定
-function getOrSetCookie(name, defaultValue) {
+// クッキー検索
+function getCookie(name) {
   // クッキーの文字列を取得
   var cookies = document.cookie.split(";");
 
@@ -79,8 +79,21 @@ function getOrSetCookie(name, defaultValue) {
     }
   }
 
-  // 指定された名前のクッキーが見つからなかった場合はデフォルト値を設定して返す
-  var newCookie = name + "=" + defaultValue;
+  // 指定された名前のクッキーが見つからなかった場合
+  return null;
+}
+
+// クッキー設定
+function setCookie(name, value) {
+  // クッキーを設定
+  var newCookie = name + "=" + value;
   document.cookie = newCookie;
-  return defaultValue;
+}
+
+// エラー時処理
+function showError(errorMsg1, errorMsg2) {
+  // コンソールに表示
+  console.error(errorMsg1, errorMsg2);
+  // 画面に表示
+  alert(errorMsg1 + errorMsg2);
 }
