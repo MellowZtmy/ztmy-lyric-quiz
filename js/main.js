@@ -15,12 +15,6 @@ const display = {
 var quizzes;
 // 現在のクイズインデックス
 var currentQuizIndex;
-// 現在のスコア
-var score;
-// 現在の連続正解数
-var combo;
-// 最大スコア
-var maxScore;
 // クイズ結果
 var resultList;
 
@@ -51,12 +45,6 @@ function loadQuiz(isInit = false) {
     if (isInit) {
       // 現在の問題初期化
       currentQuizIndex = 0;
-      // スコア初期化
-      score = 0;
-      // 最大スコア初期化
-      maxScore = 0;
-      //連続正解数初期化
-      combo = 0;
       // 結果初期化
       resultList = [];
       // クイズ作成
@@ -81,27 +69,11 @@ function onSelect(selected) {
     // 結果保持
     resultList.push(isCorrect);
 
-    // スコア設定
-    if (isCorrect) {
-      //連続正解数加算
-      combo++;
-      // 正解の場合スコア加算
-      score += appsettings.pointPerQuiz * combo;
-    } else {
-      //連続正解数初期化
-      combo = 0;
-      // 正解の場合スコア減算
-      score -= appsettings.pointPerQuiz * appsettings.penaltyRate;
-      // スコアがマイナスになった場合0にする
-      if (score < 0) score = 0;
-    }
-
-    // 最大スコア設定
-    maxScore += appsettings.pointPerQuiz * (currentQuizIndex + 1);
-
-    // ラジオボタン非活性、色変え
-    $('[name="choices"]').prop("disabled", true);
+    // ラジオボタン制御
     $('[name="choices"]').each(function () {
+      // 非活性
+      $(this).prop("disabled", true);
+      // 色変え
       var value = $(this).val();
       if (value == quiz.correctAnswer) {
         // 正解の択
@@ -136,13 +108,6 @@ function showResult() {
   try {
     // クイズ画面を表示
     createDisplay(display.RESULT);
-
-    // ハイスコア格納
-    var highScore = getCookie(appsettings.cookieName.highScore);
-    if (!highScore || highScore < score) {
-      // クッキーにハイスコアがない、またはクッキーのハイスコアを上回った時格納
-      setCookie(appsettings.cookieName.highScore, score);
-    }
   } catch (error) {
     // エラーハンドリング
     showError("Failed to result select:", error);
@@ -159,7 +124,7 @@ function createQuizzes() {
   // 全歌詞取得
   const lyrics = csvData.slice(appsettings.lyricsStartLine);
   // 問題数取得
-  const quizzesLength = appsettings.quizzesLength;
+  const quizzesLength = 5;
   // 選択肢数取得
   const choiceLength = appsettings.choiceLength;
 
@@ -293,8 +258,6 @@ function createDisplay(mode) {
   } else if (mode === display.QUIZ) {
     // QUIZ画面の場合
     var quiz = quizzes[currentQuizIndex];
-    // TODO 削除 tag += " <!-- スコア -->";
-    // TODO 削除 tag += ' <h2 class="right-text">' + score + " pt</h2>";
     tag += " ";
     tag += " <!-- 問題番号 -->";
     tag += " <h2>Question. " + (currentQuizIndex + 1) + "</h2>";
@@ -333,7 +296,6 @@ function createDisplay(mode) {
       '   <button id="result" onclick="showResult()" class="btn btn--purple btn--radius btn--cubic" style="display: none;">RESULT</button>';
   } else if (mode === display.RESULT) {
     // RESULT画面
-    // TODO 削除 tag += ' <h2 class="center-text">' + score + "pt / " + maxScore + "pt</h2>";
     tag +=
       ' <h2 class="center-text">' +
       resultList.filter((element) => element).length +
