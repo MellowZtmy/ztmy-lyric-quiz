@@ -300,8 +300,6 @@ function createDisplay(mode) {
     tag += " ";
     tag +=
       ' <button id="retry" onclick="loadQuiz(true)" class="btn btn--purple btn--radius btn--cubic">RETRY</button>';
-    tag +=
-      ' <button id="top" onclick="createDisplay(display.TOP)" class="btn btn--purple btn--radius btn--cubic">TOP</button>';
   }
 
   // タグ流し込み
