@@ -129,7 +129,7 @@ function createQuizzes() {
   // 全歌詞取得
   const lyrics = csvData.slice(appsettings.lyricsStartLine);
   // 問題数取得
-  const quizzesLength = 50;
+  const quizzesLength = songs.length;
   // 選択肢数取得
   const choiceLength = appsettings.choiceLength;
 
@@ -253,15 +253,23 @@ function createDisplay(mode) {
     // TOP画面の場合
     tag +=
       '<div id="version" class="right-text">' + appsettings.version + "</div>";
-    // tag += "<label>";
-    // tag += '    <input type="radio" name="quizLength" value="5"> 5問';
-    // tag += "</label>";
-    // tag += "<label>";
-    // tag += '    <input type="radio" name="quizLength" value="10"> 10問';
-    // tag += "</label>";
-    // tag += "<label>";
-    // tag += '    <input type="radio" name="quizLength" value="endless"> ENDLESS';
-    // tag += "</label>";
+
+    tag += ' <h2 class="top-display">album</h2>';
+    tag +=
+      ' <img src="images/album/潜潜話.jpg" width="120" height="120" alt="潜潜話">';
+    tag +=
+      ' <img src="images/album/ぐされ.jpg" width="120" height="120" alt="ぐされ">';
+    tag +=
+      ' <img src="images/album/沈香学.jpg" width="120" height="120" alt="沈香学">';
+    tag += ' <h2 class="top-display">minialbum</h2>';
+    tag +=
+      ' <img src="images/minialbum/正しい偽りからの起床.jpg" width="120" height="120" alt="正しい偽りからの起床">';
+    tag +=
+      ' <img src="images/minialbum/今は今で誓いは笑みで.jpg" width="120" height="120" alt="今は今で誓いは笑みで">';
+    tag +=
+      ' <img src="images/minialbum/朗らかな皮膚とて不服.jpg" width="120" height="120" alt="朗らかな皮膚とて不服">';
+    tag +=
+      ' <img src="images/minialbum/伸び仕草懲りて暇乞い.jpg" width="120" height="120" alt="伸び仕草懲りて暇乞い">';
     tag += "<button";
     tag += '  onclick="loadQuiz(true)"';
     tag += '  class="btn btn--purple btn--radius btn--cubic bottom-button"';
@@ -332,7 +340,8 @@ function createDisplay(mode) {
     quizzes.forEach((quiz, index) => {});
     tag +=
       ' <button id="retry" onclick="loadQuiz(true)" class="btn btn--purple btn--radius btn--cubic">RETRY</button>';
-    tag += '<div class="center-text margin-top-20">';
+    tag +=
+      '<div id="top" class="center-text margin-top-20" style="display: none;">';
     tag += '  <a href="javascript:createDisplay(display.TOP);">TOP</a>';
     tag += "</div>";
   }

@@ -21,6 +21,12 @@ h1 {
   padding: 1rem 2rem;
   border-top: 3px solid #000;
   border-bottom: 3px solid #000;
+  cursor: pointer;
+}
+
+h2.top-display{
+  border-bottom: 2px dashed #000;
+  padding-bottom: 5px;
 }
 
 /* ボタン用CSS */
