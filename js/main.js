@@ -256,20 +256,20 @@ function createDisplay(mode) {
 
     tag += ' <h2 class="top-display">album</h2>';
     tag +=
-      ' <img src="images/album/潜潜話.jpg" width="120" height="120" alt="潜潜話">';
+      ' <img src="images/album/潜潜話.jpg" width="80" height="80" alt="潜潜話" class="darken-on-tap">';
     tag +=
-      ' <img src="images/album/ぐされ.jpg" width="120" height="120" alt="ぐされ">';
+      ' <img src="images/album/ぐされ.jpg" width="80" height="80" alt="ぐされ" class="darken-on-tap">';
     tag +=
-      ' <img src="images/album/沈香学.jpg" width="120" height="120" alt="沈香学">';
+      ' <img src="images/album/沈香学.jpg" width="80" height="80" alt="沈香学" class="darken-on-tap">';
     tag += ' <h2 class="top-display">minialbum</h2>';
     tag +=
-      ' <img src="images/minialbum/正しい偽りからの起床.jpg" width="120" height="120" alt="正しい偽りからの起床">';
+      ' <img src="images/minialbum/正しい偽りからの起床.jpg" width="80" height="80" alt="正しい偽りからの起床">';
     tag +=
-      ' <img src="images/minialbum/今は今で誓いは笑みで.jpg" width="120" height="120" alt="今は今で誓いは笑みで">';
+      ' <img src="images/minialbum/今は今で誓いは笑みで.jpg" width="80" height="80" alt="今は今で誓いは笑みで">';
     tag +=
-      ' <img src="images/minialbum/朗らかな皮膚とて不服.jpg" width="120" height="120" alt="朗らかな皮膚とて不服">';
+      ' <img src="images/minialbum/朗らかな皮膚とて不服.jpg" width="80" height="80" alt="朗らかな皮膚とて不服">';
     tag +=
-      ' <img src="images/minialbum/伸び仕草懲りて暇乞い.jpg" width="120" height="120" alt="伸び仕草懲りて暇乞い">';
+      ' <img src="images/minialbum/伸び仕草懲りて暇乞い.jpg" width="80" height="80" alt="伸び仕草懲りて暇乞い">';
     tag += "<button";
     tag += '  onclick="loadQuiz(true)"';
     tag += '  class="btn btn--purple btn--radius btn--cubic bottom-button"';
