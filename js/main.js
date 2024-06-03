@@ -17,6 +17,8 @@ var quizzes;
 var currentQuizIndex;
 // クイズ結果
 var resultList;
+// ACAねさんの一言
+var acaneWords;
 
 /**
  * 【イベント処理】
@@ -28,9 +30,12 @@ $(document).ready(async function () {
     appsettings = await getJsonData("appsettings.json");
 
     // 2. 歌詞情報読み込み
-    csvData = await fetchCsvData();
+    csvData = await fetchCsvData(appsettings.lyricsFileName);
 
-    // 3. 開始画面を表示
+    // 3. ACAねさんのひとこと読み込み
+    acaneWords = await fetchCsvData(appsettings.acaneWordsFileName);
+
+    // 4. 開始画面を表示
     createDisplay(display.TOP);
   } catch (error) {
     // エラーハンドリング
@@ -124,7 +129,7 @@ function createQuizzes() {
   // 全歌詞取得
   const lyrics = csvData.slice(appsettings.lyricsStartLine);
   // 問題数取得
-  const quizzesLength = 5;
+  const quizzesLength = 50;
   // 選択肢数取得
   const choiceLength = appsettings.choiceLength;
 
@@ -165,7 +170,7 @@ function createQuizzes() {
     let song = "";
     while (true) {
       // 乱数生成し、正解の曲を設定
-      songIndex = Math.floor(Math.random() * songs.length);
+      songIndex = getRamdomNumber(songs.length);
 
       // 曲取得
       song = songs[songIndex];
@@ -188,7 +193,7 @@ function createQuizzes() {
       // 不正解曲設定
       while (true) {
         // 乱数生成し、曲を設定
-        const wrongSongIndex = Math.floor(Math.random() * songs.length);
+        const wrongSongIndex = getRamdomNumber(songs.length);
 
         // 不正解曲取得
         const wrongSong = songs[wrongSongIndex];
@@ -211,7 +216,7 @@ function createQuizzes() {
     // 3. 問題文歌詞作成
     while (true) {
       // 乱数生成し、問題文の歌詞を設定
-      const lyricsIndex = Math.floor(Math.random() * lyrics.length);
+      const lyricsIndex = getRamdomNumber(lyrics.length);
 
       // 歌詞取得
       const lyric = lyrics[lyricsIndex][songIndex];
@@ -248,6 +253,15 @@ function createDisplay(mode) {
     // TOP画面の場合
     tag +=
       '<div id="version" class="right-text">' + appsettings.version + "</div>";
+    // tag += "<label>";
+    // tag += '    <input type="radio" name="quizLength" value="5"> 5問';
+    // tag += "</label>";
+    // tag += "<label>";
+    // tag += '    <input type="radio" name="quizLength" value="10"> 10問';
+    // tag += "</label>";
+    // tag += "<label>";
+    // tag += '    <input type="radio" name="quizLength" value="endless"> ENDLESS';
+    // tag += "</label>";
     tag += "<button";
     tag += '  onclick="loadQuiz(true)"';
     tag += '  class="btn btn--purple btn--radius btn--cubic bottom-button"';
@@ -267,7 +281,7 @@ function createDisplay(mode) {
     tag += " <!-- 選択肢のラジオボタン + ラベル -->";
     quiz.choices.forEach((choice, index) => {
       tag += "   <label";
-      tag += '     class="radio-label"';
+      tag += '     class="choice-radio-label"';
       tag += '     style="display: block; font-size: 1.2em;"';
       tag += "   >";
       tag += "     <input";
@@ -289,17 +303,38 @@ function createDisplay(mode) {
     tag +=
       '   <button id="result" onclick="showResult()" class="btn btn--purple btn--radius btn--cubic" style="display: none;">RESULT</button>';
   } else if (mode === display.RESULT) {
+    // 問題数取得
+    var quizzesLength = quizzes.length;
+    // 正解数取得
+    var correctCount = resultList.filter((element) => element).length;
+    // ACAねさんからのひとこと(空想)設定 TODO 削除
+    var correctRate = (correctCount / quizzesLength) * 100;
+    var ratePerLevel = 100 / acaneWords.length;
+    var dispWord;
+    var line = 0;
+    for (let i = 100; i > 0; i -= ratePerLevel) {
+      if (correctRate >= i || correctRate == 0) {
+        var currentLevelWords =
+          acaneWords[correctRate == 0 ? acaneWords.length - 1 : line];
+        dispWord = currentLevelWords[getRamdomNumber(currentLevelWords.length)];
+        break;
+      }
+      line++;
+    }
+
     // RESULT画面
     tag +=
       ' <h2 class="center-text">' +
-      resultList.filter((element) => element).length +
+      correctCount +
       " / " +
-      resultList.length +
+      quizzesLength +
       "</h2>";
-    tag += " ";
-    tag += " ";
+    quizzes.forEach((quiz, index) => {});
     tag +=
       ' <button id="retry" onclick="loadQuiz(true)" class="btn btn--purple btn--radius btn--cubic">RETRY</button>';
+    tag += '<div class="center-text margin-top-20">';
+    tag += '  <a href="javascript:createDisplay(display.TOP);">TOP</a>';
+    tag += "</div>";
   }
 
   // タグ流し込み

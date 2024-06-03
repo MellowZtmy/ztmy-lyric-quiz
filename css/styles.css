@@ -3,12 +3,11 @@ body {
   background-color: #9932cc;
 }
 
-/* フォント用CSS */
+/* テキスト用CSS */
 *{
   font-family:"ＭＳ Ｐゴシック",sans-serif;
 }
 
-/* テキスト用CSS */
 .center-text {
     text-align: center;
     flex-grow: 1;
@@ -35,7 +34,6 @@ h1 {
 html {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
-  /* font-size: 62.5%;rem算出をしやすくするために */
 }
 
 .btn,
@@ -76,7 +74,7 @@ input[type=radio] {
   display: none; /* ラジオボタンを非表示にする */
 }
 
-.radio-label {
+.choice-radio-label {
   display: block; /* ブロックレベル要素化する */
   line-height: 45px; /* 行の高さを指定する */
   height: 50px; /* ボックスの高さを指定する */
@@ -94,4 +92,9 @@ input[type=radio] {
 .label-incorrect {
   color: #FF0000;
   background-color: #F6CEEC;
+}
+
+/* 画面表示用CSS */
+.margin-top-20 {
+  margin: 20px auto auto auto;
 }

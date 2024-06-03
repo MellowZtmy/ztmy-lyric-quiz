@@ -10,13 +10,13 @@ function getJsonData(jsonUrl) {
 }
 
 // CSVデータを取得する関数
-async function fetchCsvData() {
+async function fetchCsvData(fileName) {
   try {
-    const response = await fetch(appsettings.lyricsFileName);
+    const response = await fetch(fileName);
     const text = await response.text();
     return parseCsv(text);
   } catch (error) {
-    throw new Error("Failed to load CSV file");
+    throw new Error("Failed to load CSV file:" + fileName);
   }
 }
 
@@ -61,6 +61,11 @@ function shuffle(array) {
     result.push(val);
   }
   return result;
+}
+
+// 乱数生成
+function getRamdomNumber(num) {
+  return Math.floor(Math.random() * num);
 }
 
 // クッキー検索
