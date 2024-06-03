@@ -250,26 +250,38 @@ function createDisplay(mode) {
 
   // タグ作成
   if (mode === display.TOP) {
-    // TOP画面の場合
+    // TOP画面生成
     tag +=
       '<div id="version" class="right-text">' + appsettings.version + "</div>";
 
     tag += ' <h2 class="top-display">album</h2>';
-    tag +=
-      ' <img src="images/album/潜潜話.jpg" width="80" height="80" alt="潜潜話" class="darken-on-tap">';
-    tag +=
-      ' <img src="images/album/ぐされ.jpg" width="80" height="80" alt="ぐされ" class="darken-on-tap">';
-    tag +=
-      ' <img src="images/album/沈香学.jpg" width="80" height="80" alt="沈香学" class="darken-on-tap">';
+    ["01_潜潜話", "02_ぐされ", "03_沈香学"].forEach(function (album) {
+      tag +=
+        ' <img src="' +
+        appsettings.albumImagePath +
+        "/" +
+        album +
+        '.jpg" alt="' +
+        album +
+        '" class="album" onclick="toggleDarkness(this)">';
+    });
+
     tag += ' <h2 class="top-display">minialbum</h2>';
-    tag +=
-      ' <img src="images/minialbum/正しい偽りからの起床.jpg" width="80" height="80" alt="正しい偽りからの起床">';
-    tag +=
-      ' <img src="images/minialbum/今は今で誓いは笑みで.jpg" width="80" height="80" alt="今は今で誓いは笑みで">';
-    tag +=
-      ' <img src="images/minialbum/朗らかな皮膚とて不服.jpg" width="80" height="80" alt="朗らかな皮膚とて不服">';
-    tag +=
-      ' <img src="images/minialbum/伸び仕草懲りて暇乞い.jpg" width="80" height="80" alt="伸び仕草懲りて暇乞い">';
+    [
+      "01_正しい偽りからの起床",
+      "02_今は今で誓いは笑みで",
+      "03_朗らかな皮膚とて不服",
+      "04_伸び仕草懲りて暇乞い",
+    ].forEach(function (album) {
+      tag +=
+        ' <img src="' +
+        appsettings.miniAlbumImagePath +
+        "/" +
+        album +
+        '.jpg" alt="' +
+        album +
+        '" class="album" onclick="toggleDarkness(this)">';
+    });
     tag += "<button";
     tag += '  onclick="loadQuiz(true)"';
     tag += '  class="btn btn--purple btn--radius btn--cubic bottom-button"';
@@ -340,8 +352,7 @@ function createDisplay(mode) {
     quizzes.forEach((quiz, index) => {});
     tag +=
       ' <button id="retry" onclick="loadQuiz(true)" class="btn btn--purple btn--radius btn--cubic">RETRY</button>';
-    tag +=
-      '<div id="top" class="center-text margin-top-20" style="display: none;">';
+    tag += '<div id="top" class="center-text margin-top-20"">';
     tag += '  <a href="javascript:createDisplay(display.TOP);">TOP</a>';
     tag += "</div>";
   }

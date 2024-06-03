@@ -102,3 +102,8 @@ function showError(errorMsg1, errorMsg2) {
   // 画面に表示
   alert(errorMsg1 + errorMsg2);
 }
+
+// cssを切り替える関数
+function toggleDarkness(image) {
+  image.classList.toggle("darkened");
+}
