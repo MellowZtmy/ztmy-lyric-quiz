@@ -103,7 +103,43 @@ function showError(errorMsg1, errorMsg2) {
   alert(errorMsg1 + errorMsg2);
 }
 
-// cssを切り替える関数
-function toggleDarkness(image) {
+// アルバムタップ時
+function clickAlbum(image) {
+  // 暗め表示の切り替え
   image.classList.toggle("darkened");
+  // 選択中リストの編集
+  if (image.name === "album") {
+    selectedAlbums = image.classList.contains("darkened")
+      ? selectedAlbums.filter((item) => item !== image.id)
+      : selectedAlbums.concat(image.id);
+  }
+  if (image.name === "minialbum") {
+    selectedMinialbums = image.classList.contains("darkened")
+      ? selectedMinialbums.filter((item) => item !== image.id)
+      : selectedMinialbums.concat(image.id);
+  }
+
+  // アルバム、ミニアルバムリストより出題する曲リスト取得
+  selectedSongIndex = getSelectedSongIndex();
+  $("#songCount").text(selectedSongIndex.length + " Songs");
+
+  // 0曲の場合STARTさせない
+  $("#start").prop("disabled", selectedSongIndex.length == 0);
+}
+
+// 配列同士で一致するもののインデックスを返す
+function getMatchingIndices(arr1, arr2) {
+  return arr1
+    .map((item, index) => (arr2.includes(item) ? index : -1))
+    .filter((index) => index !== -1);
+}
+
+// 出題する曲リスト
+function getSelectedSongIndex() {
+  return Array.from(
+    new Set([
+      ...getMatchingIndices(songAlbums, selectedAlbums),
+      ...getMatchingIndices(songMinialbums, selectedMinialbums),
+    ])
+  );
 }

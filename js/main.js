@@ -11,6 +11,14 @@ const display = {
   QUIZ: 2,
   RESULT: 3,
 };
+// アルバム名リスト
+var songAlbums;
+var selectedAlbums;
+// ミニアルバム名リスト
+var songMinialbums;
+var selectedMinialbums;
+// 選択曲インデックス
+var selectedSongIndex;
 // クイズ
 var quizzes;
 // 現在のクイズインデックス
@@ -31,6 +39,8 @@ $(document).ready(async function () {
 
     // 2. 歌詞情報読み込み
     csvData = await fetchCsvData(appsettings.lyricsFileName);
+    songAlbums = csvData[appsettings.albumLine];
+    songMinialbums = csvData[appsettings.minialbumLine];
 
     // 3. ACAねさんのひとこと読み込み
     acaneWords = await fetchCsvData(appsettings.acaneWordsFileName);
@@ -89,15 +99,14 @@ function onSelect(selected) {
       }
     });
 
-    // 結果を表示
-    $(isCorrect ? "#correct" : "#incorrect").show();
-
     // 最終問題かどうか
     if (quizzes[currentQuizIndex + 1]) {
       // 次がある場合、NEXTボタン表示
       $("#next").show();
       // 今何問目かを加算
       currentQuizIndex++;
+      // 残り問題数表示
+      $("#leftCount").show();
     } else {
       // 最終問題の場合、RESULTボタン表示
       $("#result").show();
@@ -124,10 +133,15 @@ function showResult() {
  */
 // クイズ作成
 function createQuizzes() {
-  // 全曲名取得
-  const songs = csvData[appsettings.songNameLine];
-  // 全歌詞取得
-  const lyrics = csvData.slice(appsettings.lyricsStartLine);
+  // 選択アルバムの曲名取得
+  const songs = csvData[appsettings.songNameLine].filter((song, index) =>
+    selectedSongIndex.includes(index)
+  );
+  // 選択アルバムの歌詞取得
+  var lyrics = [];
+  csvData.slice(appsettings.lyricsStartLine).forEach((lyric) => {
+    lyrics.push(lyric.filter((_, index) => selectedSongIndex.includes(index)));
+  });
   // 問題数取得
   const quizzesLength = songs.length;
   // 選択肢数取得
@@ -250,39 +264,54 @@ function createDisplay(mode) {
 
   // タグ作成
   if (mode === display.TOP) {
+    var albums = [...new Set(songAlbums)].filter((item) => item !== "-");
+    var minialbums = [...new Set(songMinialbums)].filter(
+      (item) => item !== "-"
+    );
+    // 選択中アルバム設定
+    selectedAlbums = albums;
+    selectedMinialbums = minialbums;
+    // アルバム、ミニアルバムリストより出題する曲リスト取得
+    selectedSongIndex = getSelectedSongIndex();
+
     // TOP画面生成
     tag +=
       '<div id="version" class="right-text">' + appsettings.version + "</div>";
 
-    tag += ' <h2 class="top-display">album</h2>';
-    ["01_潜潜話", "02_ぐされ", "03_沈香学"].forEach(function (album) {
+    tag += ' <h2 class="album-display">Albums</h2>';
+    albums.forEach(function (album, index) {
       tag +=
         ' <img src="' +
         appsettings.albumImagePath +
-        "/" +
+        +(index + 1) +
+        "_" +
         album +
-        '.jpg" alt="' +
+        '.jpg" id="' +
         album +
-        '" class="album" onclick="toggleDarkness(this)">';
+        '" name="album" alt="' +
+        album +
+        '" class="album" onclick="clickAlbum(this)">';
     });
 
-    tag += ' <h2 class="top-display">minialbum</h2>';
-    [
-      "01_正しい偽りからの起床",
-      "02_今は今で誓いは笑みで",
-      "03_朗らかな皮膚とて不服",
-      "04_伸び仕草懲りて暇乞い",
-    ].forEach(function (album) {
+    tag += ' <h2 class="album-display">Minialbums</h2>';
+    minialbums.forEach(function (album, index) {
       tag +=
         ' <img src="' +
-        appsettings.miniAlbumImagePath +
-        "/" +
+        appsettings.minialbumImagePath +
+        (index + 1) +
+        "_" +
         album +
-        '.jpg" alt="' +
+        '.jpg" id="' +
         album +
-        '" class="album" onclick="toggleDarkness(this)">';
+        '" name="minialbum" alt="' +
+        album +
+        '" class="album" onclick="clickAlbum(this)">';
     });
-    tag += "<button";
+    tag +=
+      ' <h2 class="center-text margin-top-20" id="songCount">' +
+      selectedSongIndex.length +
+      " Songs</h2>";
+    tag += '<button id="start"';
     tag += '  onclick="loadQuiz(true)"';
     tag += '  class="btn btn--purple btn--radius btn--cubic bottom-button"';
     tag += ">";
@@ -322,36 +351,55 @@ function createDisplay(mode) {
       '   <button id="next" onclick="loadQuiz()" class="btn btn--purple btn--radius btn--cubic" style="display: none;">NEXT→</button>';
     tag +=
       '   <button id="result" onclick="showResult()" class="btn btn--purple btn--radius btn--cubic" style="display: none;">RESULT</button>';
+    tag += " <!-- 残り問題数 -->";
+    tag +=
+      ' <h2 id="leftCount" class="center-text margin-top-20" style="display: none;"> あと ' +
+      (quizzes.length - currentQuizIndex - 1) +
+      " 問 </h2>";
   } else if (mode === display.RESULT) {
     // 問題数取得
     var quizzesLength = quizzes.length;
     // 正解数取得
     var correctCount = resultList.filter((element) => element).length;
-    // ACAねさんからのひとこと(空想)設定 TODO 削除
-    var correctRate = (correctCount / quizzesLength) * 100;
-    var ratePerLevel = 100 / acaneWords.length;
-    var dispWord;
-    var line = 0;
-    for (let i = 100; i > 0; i -= ratePerLevel) {
-      if (correctRate >= i || correctRate == 0) {
-        var currentLevelWords =
-          acaneWords[correctRate == 0 ? acaneWords.length - 1 : line];
-        dispWord = currentLevelWords[getRamdomNumber(currentLevelWords.length)];
-        break;
-      }
-      line++;
-    }
-
     // RESULT画面
+    tag += ' <h2 class="album-display">Albums</h2>';
+    selectedAlbums.forEach(function (album, index) {
+      tag +=
+        ' <img src="' +
+        appsettings.albumImagePath +
+        +(index + 1) +
+        "_" +
+        album +
+        '.jpg" id="' +
+        album +
+        '" name="album" alt="' +
+        album +
+        '" class="album">';
+    });
+
+    tag += ' <h2 class="album-display">Minialbums</h2>';
+    selectedMinialbums.forEach(function (album, index) {
+      tag +=
+        ' <img src="' +
+        appsettings.minialbumImagePath +
+        (index + 1) +
+        "_" +
+        album +
+        '.jpg" id="' +
+        album +
+        '" name="minialbum" alt="' +
+        album +
+        '" class="album">';
+    });
     tag +=
       ' <h2 class="center-text">' +
       correctCount +
       " / " +
       quizzesLength +
       "</h2>";
-    quizzes.forEach((quiz, index) => {});
     tag +=
       ' <button id="retry" onclick="loadQuiz(true)" class="btn btn--purple btn--radius btn--cubic">RETRY</button>';
+
     tag += '<div id="top" class="center-text margin-top-20"">';
     tag += '  <a href="javascript:createDisplay(display.TOP);">TOP</a>';
     tag += "</div>";
