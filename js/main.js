@@ -266,6 +266,7 @@ function createDisplay(mode) {
     // アルバム、ミニアルバムリストより出題する曲リスト取得
     selectedSongIndex = getSelectedSongIndex();
 
+    tag += '<div class="center-text">TOP</div>';
     tag += ' <h2 class="album-display">Albums</h2>';
     albums.forEach(function (album, index) {
       tag +=
@@ -348,16 +349,13 @@ function createDisplay(mode) {
       '   <button id="next" onclick="loadQuiz()" class="btn btn--purple btn--radius btn--cubic" style="display: none;">NEXT→</button>';
     tag +=
       '   <button id="result" onclick="showResult()" class="btn btn--purple btn--radius btn--cubic" style="display: none;">RESULT</button>';
-    tag +=
-      '<div id="top" class="center-text margin-top-20" style="display: none;">';
-    tag += '  <a href="javascript:createDisplay(display.TOP);">TOP</a>';
-    tag += "</div>";
   } else if (mode === display.RESULT) {
     // 問題数取得
     var quizzesLength = quizzes.length;
     // 正解数取得
     var correctCount = resultList.filter((element) => element).length;
     // RESULT画面
+    tag += '<div class="center-text">RESULT</div>';
     tag += ' <h2 class="album-display">Albums</h2>';
     albums.forEach(function (album, index) {
       tag +=
