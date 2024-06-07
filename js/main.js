@@ -270,7 +270,7 @@ function createDisplay(mode) {
     tag +=
       '<div id="version" class="right-text">' + appsettings.version + "</div>";
 
-    tag += ' <h2 class="album-display">Album</h2>';
+    tag += ' <h2 class="album-display">Albums</h2>';
     albums.forEach(function (album, index) {
       tag +=
         ' <img src="' +
@@ -287,7 +287,7 @@ function createDisplay(mode) {
         '" onclick="clickAlbum(this)">';
     });
 
-    tag += ' <h2 class="album-display">Minialbum</h2>';
+    tag += ' <h2 class="album-display">Minialbums</h2>';
     minialbums.forEach(function (album, index) {
       tag +=
         ' <img src="' +
@@ -364,7 +364,7 @@ function createDisplay(mode) {
     // RESULT画面
     tag +=
       '<div id="version" class="right-text">' + appsettings.version + "</div>";
-    tag += ' <h2 class="album-display">Album</h2>';
+    tag += ' <h2 class="album-display">Albums</h2>';
     albums.forEach(function (album, index) {
       tag +=
         ' <img src="' +
@@ -381,7 +381,7 @@ function createDisplay(mode) {
         '">';
     });
 
-    tag += ' <h2 class="album-display">Minialbum</h2>';
+    tag += ' <h2 class="album-display">Minialbums</h2>';
     minialbums.forEach(function (album, index) {
       tag +=
         ' <img src="' +
@@ -404,11 +404,7 @@ function createDisplay(mode) {
       quizzesLength +
       "</h2>";
     tag +=
-      ' <button id="retry" onclick="loadQuiz(true)" class="btn btn--purple btn--radius btn--cubic">RETRY</button>';
-
-    tag += '<div id="top" class="center-text margin-top-20"">';
-    tag += '  <a href="javascript:createDisplay(display.TOP);">TOP</a>';
-    tag += "</div>";
+      ' <button id="retry" onclick="createDisplay(display.TOP)" class="btn btn--purple btn--radius btn--cubic">RETRY</button>';
   }
 
   // タグ流し込み
