@@ -105,8 +105,8 @@ function onSelect(selected) {
       $("#next").show();
       // 今何問目かを加算
       currentQuizIndex++;
-      // 残り問題数表示
-      $("#leftCount").show();
+      // top表示
+      $("#top").show();
     } else {
       // 最終問題の場合、RESULTボタン表示
       $("#result").show();
@@ -261,13 +261,11 @@ function createDisplay(mode) {
 
   // 変数初期化
   var tag = "";
+  var albums = [...new Set(songAlbums)].filter((item) => item !== "-");
+  var minialbums = [...new Set(songMinialbums)].filter((item) => item !== "-");
 
   // タグ作成
   if (mode === display.TOP) {
-    var albums = [...new Set(songAlbums)].filter((item) => item !== "-");
-    var minialbums = [...new Set(songMinialbums)].filter(
-      (item) => item !== "-"
-    );
     // 選択中アルバム設定
     selectedAlbums = albums;
     selectedMinialbums = minialbums;
@@ -322,7 +320,12 @@ function createDisplay(mode) {
     var quiz = quizzes[currentQuizIndex];
     tag += " ";
     tag += " <!-- 問題番号 -->";
-    tag += " <h2>Question. " + (currentQuizIndex + 1) + "</h2>";
+    tag +=
+      " <h2>Question. " +
+      (currentQuizIndex + 1) +
+      " / " +
+      quizzes.length +
+      "</h2>";
     tag += " ";
     tag += " <!-- 問題文 -->";
     tag += ' <p style="font-size: 1.5em;">『' + quiz.question + "』</p>";
@@ -351,45 +354,50 @@ function createDisplay(mode) {
       '   <button id="next" onclick="loadQuiz()" class="btn btn--purple btn--radius btn--cubic" style="display: none;">NEXT→</button>';
     tag +=
       '   <button id="result" onclick="showResult()" class="btn btn--purple btn--radius btn--cubic" style="display: none;">RESULT</button>';
-    tag += " <!-- 残り問題数 -->";
     tag +=
-      ' <h2 id="leftCount" class="center-text margin-top-20" style="display: none;"> あと ' +
-      (quizzes.length - currentQuizIndex - 1) +
-      " 問 </h2>";
+      '<div id="top" class="center-text margin-top-20" style="display: none;">';
+    tag += '  <a href="javascript:createDisplay(display.TOP);">TOP</a>';
+    tag += "</div>";
   } else if (mode === display.RESULT) {
     // 問題数取得
     var quizzesLength = quizzes.length;
     // 正解数取得
     var correctCount = resultList.filter((element) => element).length;
     // RESULT画面
-    tag += ' <h2 class="album-display">Albums</h2>';
-    selectedAlbums.forEach(function (album, index) {
-      tag +=
-        ' <img src="' +
-        appsettings.albumImagePath +
-        +(index + 1) +
-        "_" +
-        album +
-        '.jpg" id="' +
-        album +
-        '" name="album" alt="' +
-        album +
-        '" class="album">';
+    tag +=
+      selectedAlbums.length > 0 ? ' <h2 class="album-display">Albums</h2>' : "";
+    albums.forEach(function (album, index) {
+      tag += selectedAlbums.includes(album)
+        ? ' <img src="' +
+          appsettings.albumImagePath +
+          +(index + 1) +
+          "_" +
+          album +
+          '.jpg" id="' +
+          album +
+          '" name="album" alt="' +
+          album +
+          '" class="album">'
+        : "";
     });
 
-    tag += ' <h2 class="album-display">Minialbums</h2>';
-    selectedMinialbums.forEach(function (album, index) {
-      tag +=
-        ' <img src="' +
-        appsettings.minialbumImagePath +
-        (index + 1) +
-        "_" +
-        album +
-        '.jpg" id="' +
-        album +
-        '" name="minialbum" alt="' +
-        album +
-        '" class="album">';
+    tag +=
+      selectedMinialbums.length > 0
+        ? ' <h2 class="album-display">Minialbums</h2>'
+        : "";
+    minialbums.forEach(function (album, index) {
+      tag += selectedMinialbums.includes(album)
+        ? ' <img src="' +
+          appsettings.minialbumImagePath +
+          (index + 1) +
+          "_" +
+          album +
+          '.jpg" id="' +
+          album +
+          '" name="minialbum" alt="' +
+          album +
+          '" class="album">'
+        : "";
     });
     tag +=
       ' <h2 class="center-text">' +
