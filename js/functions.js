@@ -83,7 +83,7 @@ function showError(errorMsg1, errorMsg2) {
   // コンソールに表示
   console.error(errorMsg1, errorMsg2);
   // 画面に表示
-  alert(errorMsg1 + errorMsg2);
+  alert(errorMsg2);
 }
 
 // アルバムタップ時
