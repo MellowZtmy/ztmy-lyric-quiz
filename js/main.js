@@ -266,7 +266,6 @@ function createDisplay(mode) {
     // アルバム、ミニアルバムリストより出題する曲リスト取得
     selectedSongIndex = getSelectedSongIndex();
 
-    tag += '<div class="center-text">TOP</div>';
     tag += ' <h2 class="album-display">Albums</h2>';
     albums.forEach(function (album, index) {
       tag +=
@@ -355,7 +354,6 @@ function createDisplay(mode) {
     // 正解数取得
     var correctCount = resultList.filter((element) => element).length;
     // RESULT画面
-    tag += '<div class="center-text">RESULT</div>';
     tag += ' <h2 class="album-display">Albums</h2>';
     albums.forEach(function (album, index) {
       tag +=
