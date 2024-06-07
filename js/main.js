@@ -266,10 +266,6 @@ function createDisplay(mode) {
     // アルバム、ミニアルバムリストより出題する曲リスト取得
     selectedSongIndex = getSelectedSongIndex();
 
-    // TOP画面生成
-    tag +=
-      '<div id="version" class="right-text">' + appsettings.version + "</div>";
-
     tag += ' <h2 class="album-display">Albums</h2>';
     albums.forEach(function (album, index) {
       tag +=
@@ -362,8 +358,6 @@ function createDisplay(mode) {
     // 正解数取得
     var correctCount = resultList.filter((element) => element).length;
     // RESULT画面
-    tag +=
-      '<div id="version" class="right-text">' + appsettings.version + "</div>";
     tag += ' <h2 class="album-display">Albums</h2>';
     albums.forEach(function (album, index) {
       tag +=
