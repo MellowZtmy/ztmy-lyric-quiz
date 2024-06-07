@@ -1,32 +1,32 @@
 /**
  * 【定数設定】
  */
-// 設定ファイル情報
-var appsettings;
-// 歌詞ファイル情報
-var csvData;
 // 画面表示モード
 const display = {
   TOP: 1,
   QUIZ: 2,
   RESULT: 3,
 };
+// 設定ファイル情報
+var appsettings = [];
+// 歌詞ファイル情報
+var csvData = [];
 // アルバム名リスト
-var songAlbums;
-var selectedAlbums;
+var songAlbums = [];
+var selectedAlbums = [];
+var albums = [];
 // ミニアルバム名リスト
-var songMinialbums;
-var selectedMinialbums;
+var songMinialbums = [];
+var selectedMinialbums = [];
+var minialbums = [];
 // 選択曲インデックス
-var selectedSongIndex;
+var selectedSongIndex = [];
 // クイズ
-var quizzes;
+var quizzes = [];
 // 現在のクイズインデックス
 var currentQuizIndex;
 // クイズ結果
-var resultList;
-// ACAねさんの一言
-var acaneWords;
+var resultList = [];
 
 /**
  * 【イベント処理】
@@ -40,7 +40,9 @@ $(document).ready(async function () {
     // 2. 歌詞情報読み込み
     csvData = await fetchCsvData(appsettings.lyricsFileName);
     songAlbums = csvData[appsettings.albumLine];
+    albums = [...new Set(songAlbums)].filter((item) => item !== "-");
     songMinialbums = csvData[appsettings.minialbumLine];
+    minialbums = [...new Set(songMinialbums)].filter((item) => item !== "-");
 
     // 3. ACAねさんのひとこと読み込み
     acaneWords = await fetchCsvData(appsettings.acaneWordsFileName);
@@ -158,13 +160,7 @@ function createQuizzes() {
     );
   }
   if (songs.length < choiceLength) {
-    throw new Error(
-      "全曲数" +
-        songs.length +
-        "曲です。" +
-        choiceLength +
-        "の選択肢は作れません。"
-    );
+    throw new Error(choiceLength + "曲以上選んでね");
   }
 
   // 各変数初期化
@@ -261,14 +257,12 @@ function createDisplay(mode) {
 
   // 変数初期化
   var tag = "";
-  var albums = [...new Set(songAlbums)].filter((item) => item !== "-");
-  var minialbums = [...new Set(songMinialbums)].filter((item) => item !== "-");
 
   // タグ作成
   if (mode === display.TOP) {
     // 選択中アルバム設定
-    selectedAlbums = albums;
-    selectedMinialbums = minialbums;
+    selectedAlbums = getLocalArray("selectedAlbums");
+    selectedMinialbums = getLocalArray("selectedMinialbums");
     // アルバム、ミニアルバムリストより出題する曲リスト取得
     selectedSongIndex = getSelectedSongIndex();
 
@@ -276,7 +270,7 @@ function createDisplay(mode) {
     tag +=
       '<div id="version" class="right-text">' + appsettings.version + "</div>";
 
-    tag += ' <h2 class="album-display">Albums</h2>';
+    tag += ' <h2 class="album-display">Album</h2>';
     albums.forEach(function (album, index) {
       tag +=
         ' <img src="' +
@@ -288,10 +282,12 @@ function createDisplay(mode) {
         album +
         '" name="album" alt="' +
         album +
-        '" class="album" onclick="clickAlbum(this)">';
+        '" class="album' +
+        (selectedAlbums.includes(album) ? "" : " darkened") +
+        '" onclick="clickAlbum(this)">';
     });
 
-    tag += ' <h2 class="album-display">Minialbums</h2>';
+    tag += ' <h2 class="album-display">Minialbum</h2>';
     minialbums.forEach(function (album, index) {
       tag +=
         ' <img src="' +
@@ -303,7 +299,9 @@ function createDisplay(mode) {
         album +
         '" name="minialbum" alt="' +
         album +
-        '" class="album" onclick="clickAlbum(this)">';
+        '" class="album' +
+        (selectedMinialbums.includes(album) ? "" : " darkened") +
+        '" onclick="clickAlbum(this)">';
     });
     tag +=
       ' <h2 class="center-text margin-top-20" id="songCount">' +
@@ -365,39 +363,39 @@ function createDisplay(mode) {
     var correctCount = resultList.filter((element) => element).length;
     // RESULT画面
     tag +=
-      selectedAlbums.length > 0 ? ' <h2 class="album-display">Albums</h2>' : "";
+      '<div id="version" class="right-text">' + appsettings.version + "</div>";
+    tag += ' <h2 class="album-display">Album</h2>';
     albums.forEach(function (album, index) {
-      tag += selectedAlbums.includes(album)
-        ? ' <img src="' +
-          appsettings.albumImagePath +
-          +(index + 1) +
-          "_" +
-          album +
-          '.jpg" id="' +
-          album +
-          '" name="album" alt="' +
-          album +
-          '" class="album">'
-        : "";
+      tag +=
+        ' <img src="' +
+        appsettings.albumImagePath +
+        +(index + 1) +
+        "_" +
+        album +
+        '.jpg" id="' +
+        album +
+        '" name="album" alt="' +
+        album +
+        '" class="album' +
+        (selectedAlbums.includes(album) ? "" : " darkened") +
+        '">';
     });
 
-    tag +=
-      selectedMinialbums.length > 0
-        ? ' <h2 class="album-display">Minialbums</h2>'
-        : "";
+    tag += ' <h2 class="album-display">Minialbum</h2>';
     minialbums.forEach(function (album, index) {
-      tag += selectedMinialbums.includes(album)
-        ? ' <img src="' +
-          appsettings.minialbumImagePath +
-          (index + 1) +
-          "_" +
-          album +
-          '.jpg" id="' +
-          album +
-          '" name="minialbum" alt="' +
-          album +
-          '" class="album">'
-        : "";
+      tag +=
+        ' <img src="' +
+        appsettings.minialbumImagePath +
+        (index + 1) +
+        "_" +
+        album +
+        '.jpg" id="' +
+        album +
+        '" name="minialbum" alt="' +
+        album +
+        '" class="album' +
+        (selectedMinialbums.includes(album) ? "" : " darkened") +
+        '">';
     });
     tag +=
       ' <h2 class="center-text">' +

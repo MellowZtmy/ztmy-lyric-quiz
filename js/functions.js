@@ -68,31 +68,14 @@ function getRamdomNumber(num) {
   return Math.floor(Math.random() * num);
 }
 
-// クッキー検索
-function getCookie(name) {
-  // クッキーの文字列を取得
-  var cookies = document.cookie.split(";");
-
-  // 各クッキーをループして指定された名前のクッキーを探す
-  for (var i = 0; i < cookies.length; i++) {
-    var cookie = cookies[i].trim();
-
-    // クッキーが指定された名前を持っているかどうかを確認
-    if (cookie.startsWith(name + "=")) {
-      // 指定された名前のクッキーが見つかったら、その値を返す
-      return cookie.substring(name.length + 1);
-    }
-  }
-
-  // 指定された名前のクッキーが見つからなかった場合
-  return null;
+// ローカルストレージから配列を取得(nullは空に)
+function getLocalArray(name) {
+  return JSON.parse(localStorage.getItem(name)) ?? [];
 }
 
-// クッキー設定
-function setCookie(name, value) {
-  // クッキーを設定
-  var newCookie = name + "=" + value;
-  document.cookie = newCookie;
+// ローカルストレージに配列設定(nullは空に)
+function setLocalArray(name, array) {
+  localStorage.setItem(name, JSON.stringify(array ?? []));
 }
 
 // エラー時処理
@@ -119,12 +102,13 @@ function clickAlbum(image) {
       : selectedMinialbums.concat(image.id);
   }
 
+  // ローカルストレージに保存
+  setLocalArray("selectedAlbums", selectedAlbums);
+  setLocalArray("selectedMinialbums", selectedMinialbums);
+
   // アルバム、ミニアルバムリストより出題する曲リスト取得
   selectedSongIndex = getSelectedSongIndex();
   $("#songCount").text(selectedSongIndex.length + " Songs");
-
-  // 0曲の場合STARTさせない
-  $("#start").prop("disabled", selectedSongIndex.length == 0);
 }
 
 // 配列同士で一致するもののインデックスを返す
