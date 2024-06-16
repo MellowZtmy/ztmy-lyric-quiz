@@ -303,6 +303,9 @@ function createDisplay(mode) {
     tag += '>';
     tag += '  START';
     tag += '</button>';
+
+    // 紙吹雪解除
+    $('canvas')?.remove();
   } else if (mode === display.QUIZ) {
     // QUIZ画面の場合
     var quiz = quizzes[currentQuizIndex];
@@ -350,12 +353,7 @@ function createDisplay(mode) {
     // RESULT画面
     tag += ' <h2 class="h2-display">Result</h2>';
     quizzes.forEach((quiz, index) => {
-      tag +=
-        ' <div class="font-one-point-two">Q' +
-        (index + 1) +
-        '『' +
-        quiz.question +
-        '』</div>';
+      tag += ' <div class="font-one-point-two">『' + quiz.question + '』</div>';
       tag +=
         ' <div class="font-one-point-two right-text ' +
         (selectedList[index] === quiz.correctAnswer ? 'text-correct' : '') +
@@ -365,13 +363,25 @@ function createDisplay(mode) {
       tag += index === quizzes.length - 1 ? '' : '<br>';
     });
     tag +=
-      ' <h2 class="center-text">' +
+      ' <h2 class="center-text' +
+      (correctCount === quizzesLength ? ' text-correct' : '') +
+      '">' +
       correctCount +
       ' / ' +
       quizzesLength +
       '</h2>';
     tag +=
+      correctCount === quizzesLength
+        ? '<h2 class="center-text text-correct">PERFECT!!</h2>'
+        : '';
+    tag +=
       ' <button id="retry" onclick="createDisplay(display.TOP)" class="btn btn--purple btn--radius btn--cubic">RETRY</button>';
+
+    // 全問正解の場合紙吹雪
+    if (correctCount === quizzesLength) {
+      $('#confetti').prepend('<canvas></canvas>');
+      dispConfetti();
+    }
   }
 
   // タグ流し込み

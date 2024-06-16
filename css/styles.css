@@ -136,3 +136,10 @@ input[type=radio] {
 .visibility-hidden{
   visibility: hidden;
 }
+
+/* 紙吹雪用CSS */
+.confetti canvas {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
