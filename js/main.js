@@ -350,17 +350,18 @@ function createDisplay(mode) {
     // RESULT画面
     tag += ' <h2 class="h2-display">Result</h2>';
     quizzes.forEach((quiz, index) => {
-      tag += ' <div class="font-one-point-two">『' + quiz.question + '』</div>';
       tag +=
-        ' <div class="font-one-point-two right-text">' +
-        quiz.choices[quiz.correctAnswer] +
-        '：<span class="' +
-        (selectedList[index] === quiz.correctAnswer
-          ? 'text-correct'
-          : 'text-incorrect') +
+        ' <div class="font-one-point-two">Q' +
+        (index + 1) +
+        '『' +
+        quiz.question +
+        '』</div>';
+      tag +=
+        ' <div class="font-one-point-two right-text ' +
+        (selectedList[index] === quiz.correctAnswer ? 'text-correct' : '') +
         '">' +
-        (selectedList[index] === quiz.correctAnswer ? '〇' : '✕') +
-        '</span></div>';
+        quiz.choices[quiz.correctAnswer] +
+        '</div>';
       tag += index === quizzes.length - 1 ? '' : '<br>';
     });
     tag +=
