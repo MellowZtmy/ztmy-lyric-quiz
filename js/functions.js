@@ -4,7 +4,7 @@ function getJsonData(jsonUrl) {
     $.getJSON(jsonUrl, function (data) {
       resolve(data);
     }).fail(function () {
-      reject("Failed to load JSON file");
+      reject('Failed to load JSON file');
     });
   });
 }
@@ -16,7 +16,7 @@ async function fetchCsvData(fileName) {
     const text = await response.text();
     return parseCsv(text);
   } catch (error) {
-    throw new Error("Failed to load CSV file:" + fileName);
+    throw new Error('Failed to load CSV file:' + fileName);
   }
 }
 
@@ -30,16 +30,16 @@ function parseCsv(csvText) {
     const row = [];
 
     let insideQuotes = false;
-    let value = "";
+    let value = '';
 
     for (let j = 0; j < line.length; j++) {
       const char = line.charAt(j);
 
       if (char === '"') {
         insideQuotes = !insideQuotes;
-      } else if (char === "," && !insideQuotes) {
+      } else if (char === ',' && !insideQuotes) {
         row.push(value);
-        value = "";
+        value = '';
       } else {
         value += char;
       }
@@ -89,26 +89,26 @@ function showError(errorMsg1, errorMsg2) {
 // アルバムタップ時
 function clickAlbum(image) {
   // 暗め表示の切り替え
-  image.classList.toggle("darkened");
+  image.classList.toggle('darkened');
   // 選択中リストの編集
-  if (image.name === "album") {
-    selectedAlbums = image.classList.contains("darkened")
+  if (image.name === 'album') {
+    selectedAlbums = image.classList.contains('darkened')
       ? selectedAlbums.filter((item) => item !== image.id)
       : selectedAlbums.concat(image.id);
   }
-  if (image.name === "minialbum") {
-    selectedMinialbums = image.classList.contains("darkened")
+  if (image.name === 'minialbum') {
+    selectedMinialbums = image.classList.contains('darkened')
       ? selectedMinialbums.filter((item) => item !== image.id)
       : selectedMinialbums.concat(image.id);
   }
 
   // ローカルストレージに保存
-  setLocalArray("selectedAlbums", selectedAlbums);
-  setLocalArray("selectedMinialbums", selectedMinialbums);
+  setLocalArray('selectedAlbums', selectedAlbums);
+  setLocalArray('selectedMinialbums', selectedMinialbums);
 
   // アルバム、ミニアルバムリストより出題する曲リスト取得
   selectedSongIndex = getSelectedSongIndex();
-  $("#songCount").text(selectedSongIndex.length + " Songs");
+  $('#songCount').text(selectedSongIndex.length + ' Songs');
 }
 
 // 配列同士で一致するもののインデックスを返す

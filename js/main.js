@@ -35,14 +35,14 @@ var resultList = [];
 $(document).ready(async function () {
   try {
     // 1. 設定ファイル読み込み
-    appsettings = await getJsonData("appsettings.json");
+    appsettings = await getJsonData('appsettings.json');
 
     // 2. 歌詞情報読み込み
     csvData = await fetchCsvData(appsettings.lyricsFileName);
     songAlbums = csvData[appsettings.albumLine];
-    albums = [...new Set(songAlbums)].filter((item) => item !== "-");
+    albums = [...new Set(songAlbums)].filter((item) => item !== '-');
     songMinialbums = csvData[appsettings.minialbumLine];
-    minialbums = [...new Set(songMinialbums)].filter((item) => item !== "-");
+    minialbums = [...new Set(songMinialbums)].filter((item) => item !== '-');
 
     // 3. ACAねさんのひとこと読み込み
     acaneWords = await fetchCsvData(appsettings.acaneWordsFileName);
@@ -51,7 +51,7 @@ $(document).ready(async function () {
     createDisplay(display.TOP);
   } catch (error) {
     // エラーハンドリング
-    showError("Failed to load data:", error);
+    showError('Failed to load data:', error);
   }
 });
 
@@ -72,7 +72,7 @@ function loadQuiz(isInit = false) {
     createDisplay(display.QUIZ);
   } catch (error) {
     // エラーハンドリング
-    showError("Failed to load quiz:", error);
+    showError('Failed to load quiz:', error);
   }
 }
 
@@ -89,33 +89,33 @@ function onSelect(selected) {
     // ラジオボタン制御
     $('[name="choices"]').each(function () {
       // 非活性
-      $(this).prop("disabled", true);
+      $(this).prop('disabled', true);
       // 色変え
       var value = $(this).val();
       if (value == quiz.correctAnswer) {
         // 正解の択
-        $(this).parent().addClass("label-correct");
+        $(this).parent().addClass('label-correct');
       } else if (value == selected) {
         // 不正解の択(選んだ時だけ)
-        $(this).parent().addClass("label-incorrect");
+        $(this).parent().addClass('label-incorrect');
       }
     });
 
     // 最終問題かどうか
     if (quizzes[currentQuizIndex + 1]) {
       // 次がある場合、NEXTボタン表示
-      $("#next").show();
+      $('#next').show();
       // 今何問目かを加算
       currentQuizIndex++;
       // top表示
-      $("#top").show();
+      $('#top').show();
     } else {
       // 最終問題の場合、RESULTボタン表示
-      $("#result").show();
+      $('#result').show();
     }
   } catch (error) {
     // エラーハンドリング
-    showError("Failed to show select:", error);
+    showError('Failed to show select:', error);
   }
 }
 
@@ -126,7 +126,7 @@ function showResult() {
     createDisplay(display.RESULT);
   } catch (error) {
     // エラーハンドリング
-    showError("Failed to result select:", error);
+    showError('Failed to result select:', error);
   }
 }
 
@@ -152,15 +152,15 @@ function createQuizzes() {
   // 正常に処理できるかチェック
   if (!appsettings.allowSameSong && songs.length < quizzesLength) {
     throw new Error(
-      "全曲数" +
+      '全曲数' +
         songs.length +
-        "曲です。問題の重複を認めない設定で" +
+        '曲です。問題の重複を認めない設定で' +
         quizzesLength +
-        "曲の問題は作れません。"
+        '曲の問題は作れません。'
     );
   }
   if (songs.length < choiceLength) {
-    throw new Error(choiceLength + "曲以上選んでね");
+    throw new Error(choiceLength + '曲以上選んでね');
   }
 
   // 各変数初期化
@@ -176,8 +176,8 @@ function createQuizzes() {
   // 問題数分処理する
   for (let i = 0; i < quizzesLength; i++) {
     // 1. 正解曲決定
-    let songIndex = "";
-    let song = "";
+    let songIndex = '';
+    let song = '';
     while (true) {
       // 乱数生成し、正解の曲を設定
       songIndex = getRamdomNumber(songs.length);
@@ -186,7 +186,7 @@ function createQuizzes() {
       song = songs[songIndex];
 
       // 曲名が取得でき被っていない場合正解曲決定
-      if (song !== "" && !songList.includes(song)) {
+      if (song !== '' && !songList.includes(song)) {
         // 正解の曲リストに曲追加
         songList.push(song);
         break;
@@ -209,7 +209,7 @@ function createQuizzes() {
         const wrongSong = songs[wrongSongIndex];
 
         // 曲名が取得でき被っていない場合選択肢決定
-        if (wrongSong !== "" && !choices[i].includes(wrongSong)) {
+        if (wrongSong !== '' && !choices[i].includes(wrongSong)) {
           // 選択肢に設定
           choices[i][j] = wrongSong;
           break;
@@ -233,7 +233,7 @@ function createQuizzes() {
 
       // 問題文が取得でき、被っていない場合歌詞決定
       if (
-        lyric !== "" &&
+        lyric !== '' &&
         (appsettings.allowSameSong || !questions.includes(lyric))
       ) {
         questions.push(lyric);
@@ -253,16 +253,16 @@ function createQuizzes() {
 // 画面タグ作成
 function createDisplay(mode) {
   // タグクリア
-  $("#display").empty();
+  $('#display').empty();
 
   // 変数初期化
-  var tag = "";
+  var tag = '';
 
   // タグ作成
   if (mode === display.TOP) {
     // 選択中アルバム設定
-    selectedAlbums = getLocalArray("selectedAlbums");
-    selectedMinialbums = getLocalArray("selectedMinialbums");
+    selectedAlbums = getLocalArray('selectedAlbums');
+    selectedMinialbums = getLocalArray('selectedMinialbums');
     // アルバム、ミニアルバムリストより出題する曲リスト取得
     selectedSongIndex = getSelectedSongIndex();
 
@@ -272,14 +272,14 @@ function createDisplay(mode) {
         ' <img src="' +
         appsettings.albumImagePath +
         +(index + 1) +
-        "_" +
+        '_' +
         album +
         '.jpg" id="' +
         album +
         '" name="album" alt="' +
         album +
         '" class="album' +
-        (selectedAlbums.includes(album) ? "" : " darkened") +
+        (selectedAlbums.includes(album) ? '' : ' darkened') +
         '" onclick="clickAlbum(this)">';
     });
 
@@ -289,61 +289,62 @@ function createDisplay(mode) {
         ' <img src="' +
         appsettings.minialbumImagePath +
         (index + 1) +
-        "_" +
+        '_' +
         album +
         '.jpg" id="' +
         album +
         '" name="minialbum" alt="' +
         album +
         '" class="album' +
-        (selectedMinialbums.includes(album) ? "" : " darkened") +
+        (selectedMinialbums.includes(album) ? '' : ' darkened') +
         '" onclick="clickAlbum(this)">';
     });
     tag +=
       ' <h2 class="center-text margin-top-20" id="songCount">' +
       selectedSongIndex.length +
-      " Songs</h2>";
+      ' Songs</h2>';
     tag += '<button id="start"';
     tag += '  onclick="loadQuiz(true)"';
     tag += '  class="btn btn--purple btn--radius btn--cubic bottom-button"';
-    tag += ">";
-    tag += "  START";
-    tag += "</button>";
+    tag += '>';
+    tag += '  START';
+    tag +=
+      '</button><div style="position: relative; width: 100%; padding-bottom: 56.25%;"><div style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;"><iframe src="https://www.youtube.com/embed/https://www.youtube.com/playlist?list=PLn4Dv716EsE2OD2ANzV_mWt7Qzci2sfQM" frameborder="0" width="100%" height="100%" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div></div>';
   } else if (mode === display.QUIZ) {
     // QUIZ画面の場合
     var quiz = quizzes[currentQuizIndex];
-    tag += " ";
-    tag += " <!-- 問題番号 -->";
+    tag += ' ';
+    tag += ' <!-- 問題番号 -->';
     tag +=
-      " <h2>Question. " +
+      ' <h2>Question. ' +
       (currentQuizIndex + 1) +
-      " / " +
+      ' / ' +
       quizzes.length +
-      "</h2>";
-    tag += " ";
-    tag += " <!-- 問題文 -->";
-    tag += ' <p style="font-size: 1.5em;">『' + quiz.question + "』</p>";
-    tag += " ";
-    tag += " <!-- 選択肢のラジオボタン + ラベル -->";
+      '</h2>';
+    tag += ' ';
+    tag += ' <!-- 問題文 -->';
+    tag += ' <p style="font-size: 1.5em;">『' + quiz.question + '』</p>';
+    tag += ' ';
+    tag += ' <!-- 選択肢のラジオボタン + ラベル -->';
     quiz.choices.forEach((choice, index) => {
-      tag += "   <label";
+      tag += '   <label';
       tag += '     class="choice-radio-label"';
       tag += '     style="display: block; font-size: 1.2em;"';
-      tag += "   >";
-      tag += "     <input";
+      tag += '   >';
+      tag += '     <input';
       tag += '       type="radio"';
       tag += '       id="choice' + index + '"';
       tag += '       value="' + index + '"';
       tag += '       name="choices"';
       tag += '       onchange="onSelect(' + index + ')"';
-      tag += "     >";
-      tag += "     " + choice + "";
-      tag += "   </label>";
-      tag += " ";
+      tag += '     >';
+      tag += '     ' + choice + '';
+      tag += '   </label>';
+      tag += ' ';
     });
 
-    tag += " ";
-    tag += " <!-- 次へ / 終了 ボタン -->";
+    tag += ' ';
+    tag += ' <!-- 次へ / 終了 ボタン -->';
     tag +=
       '   <button id="next" onclick="loadQuiz()" class="btn btn--purple btn--radius btn--cubic" style="display: none;">NEXT→</button>';
     tag +=
@@ -360,14 +361,14 @@ function createDisplay(mode) {
         ' <img src="' +
         appsettings.albumImagePath +
         +(index + 1) +
-        "_" +
+        '_' +
         album +
         '.jpg" id="' +
         album +
         '" name="album" alt="' +
         album +
         '" class="album' +
-        (selectedAlbums.includes(album) ? "" : " darkened") +
+        (selectedAlbums.includes(album) ? '' : ' darkened') +
         '">';
     });
 
@@ -377,26 +378,26 @@ function createDisplay(mode) {
         ' <img src="' +
         appsettings.minialbumImagePath +
         (index + 1) +
-        "_" +
+        '_' +
         album +
         '.jpg" id="' +
         album +
         '" name="minialbum" alt="' +
         album +
         '" class="album' +
-        (selectedMinialbums.includes(album) ? "" : " darkened") +
+        (selectedMinialbums.includes(album) ? '' : ' darkened') +
         '">';
     });
     tag +=
       ' <h2 class="center-text">' +
       correctCount +
-      " / " +
+      ' / ' +
       quizzesLength +
-      "</h2>";
+      '</h2>';
     tag +=
       ' <button id="retry" onclick="createDisplay(display.TOP)" class="btn btn--purple btn--radius btn--cubic">RETRY</button>';
   }
 
   // タグ流し込み
-  $("#display").append(tag);
+  $('#display').append(tag);
 }
