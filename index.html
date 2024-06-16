@@ -1,23 +1,22 @@
 <!DOCTYPE html>
-<meta http-equiv="content-type" charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="js/confetti.js"></script>
-<script src="js/functions.js"></script>
-<script src="js/main.js"></script>
-<link rel="stylesheet" href="css/styles.css" />
 <html>
-  <!--演出-->
-  <div id="confetti" class="confetti">
-    <head>
-      <title>ZTMY歌詞クイズ</title>
-    </head>
-    <body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ZTMY歌詞クイズ</title>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <div id="confetti" class="confetti">
+      <canvas></canvas>
       <h1 id="header" onclick="createDisplay(display.TOP)" class="center-text">
         ZTMY歌詞クイズ
       </h1>
-      <!--画面表示-->
       <div id="display"></div>
-    </body>
-  </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="js/confetti.js"></script>
+    <script src="js/functions.js"></script>
+    <script src="js/main.js"></script>
+  </body>
 </html>

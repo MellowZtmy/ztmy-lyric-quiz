@@ -139,5 +139,10 @@ input[type=radio] {
 
 /* 紙吹雪用CSS */
 .confetti canvas {
-  position: absolute;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;  /* 幅を全体に広げる */
+  height: 100%; /* 高さを全体に広げる */
+  pointer-events: none; /* 他の要素の操作を妨げないようにする */
 }
