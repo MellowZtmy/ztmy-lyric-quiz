@@ -376,14 +376,12 @@ function createDisplay(mode) {
         : '';
     tag +=
       ' <button id="retry" onclick="createDisplay(display.TOP)" class="btn btn--purple btn--radius btn--cubic">RETRY</button>';
-
-    // 全問正解の場合紙吹雪
-    //if (correctCount === quizzesLength) {
-    $('#confetti').prepend('<canvas></canvas>');
-    dispConfetti();
-    //}
   }
 
   // タグ流し込み
   $('#display').append(tag);
+
+  // 全問正解の場合紙吹雪
+  $('#confetti').prepend('<canvas></canvas>');
+  dispConfetti();
 }
