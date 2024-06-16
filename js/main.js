@@ -308,8 +308,7 @@ function createDisplay(mode) {
     tag += '  class="btn btn--purple btn--radius btn--cubic bottom-button"';
     tag += '>';
     tag += '  START';
-    tag +=
-      '</button><div style="position: relative; width: 100%; padding-bottom: 56.25%;"><div style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;"><iframe src="https://www.youtube.com/embed/https://www.youtube.com/playlist?list=PLn4Dv716EsE2OD2ANzV_mWt7Qzci2sfQM" frameborder="0" width="100%" height="100%" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div></div>';
+    tag += '</button>';
   } else if (mode === display.QUIZ) {
     // QUIZ画面の場合
     var quiz = quizzes[currentQuizIndex];
