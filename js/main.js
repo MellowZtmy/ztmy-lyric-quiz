@@ -103,16 +103,12 @@ function onSelect(selected) {
 
     // 最終問題かどうか
     if (quizzes[currentQuizIndex + 1]) {
-      // 次がある場合、NEXTボタン表示
-      $('#next').show();
       // 今何問目かを加算
       currentQuizIndex++;
-      // top表示
-      $('#top').show();
-    } else {
-      // 最終問題の場合、RESULTボタン表示
-      $('#result').show();
     }
+    // NEXTボタン、RESULTボタン表示
+    $('#next').removeClass('visibility-hidden');
+    $('#result').removeClass('visibility-hidden');
   } catch (error) {
     // エラーハンドリング
     showError('Failed to show select:', error);
@@ -344,10 +340,9 @@ function createDisplay(mode) {
 
     tag += ' ';
     tag += ' <!-- 次へ / 終了 ボタン -->';
-    tag +=
-      '   <button id="next" onclick="loadQuiz()" class="btn btn--purple btn--radius btn--cubic" style="display: none;">NEXT→</button>';
-    tag +=
-      '   <button id="result" onclick="showResult()" class="btn btn--purple btn--radius btn--cubic" style="display: none;">RESULT</button>';
+    tag += quizzes[currentQuizIndex + 1]
+      ? '   <button id="next" onclick="loadQuiz()" class="btn btn--purple btn--radius btn--cubic visibility-hidden">NEXT→</button>'
+      : '   <button id="result" onclick="showResult()" class="btn btn--purple btn--radius btn--cubic visibility-hidden">RESULT</button>';
   } else if (mode === display.RESULT) {
     // 問題数取得
     var quizzesLength = quizzes.length;

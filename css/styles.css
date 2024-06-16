@@ -115,3 +115,7 @@ input[type=radio] {
 .margin-top-20 {
   margin: 20px auto auto auto;
 }
+
+.visibility-hidden{
+  visibility: hidden;
+}
