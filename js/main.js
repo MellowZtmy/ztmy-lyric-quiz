@@ -309,20 +309,19 @@ function createDisplay(mode) {
     tag += ' ';
     tag += ' <!-- 問題番号 -->';
     tag +=
-      ' <h2>Question. ' +
+      ' <h2 class="h2-display">Question. ' +
       (currentQuizIndex + 1) +
       ' / ' +
       quizzes.length +
       '</h2>';
     tag += ' ';
     tag += ' <!-- 問題文 -->';
-    tag += ' <p style="font-size: 1.5em;">『' + quiz.question + '』</p>';
+    tag += ' <p class="font-one-point-five">『' + quiz.question + '』</p>';
     tag += ' ';
     tag += ' <!-- 選択肢のラジオボタン + ラベル -->';
     quiz.choices.forEach((choice, index) => {
       tag += '   <label';
       tag += '     class="choice-radio-label"';
-      tag += '     style="display: block; font-size: 1.2em;"';
       tag += '   >';
       tag += '     <input';
       tag += '       type="radio"';
@@ -349,23 +348,32 @@ function createDisplay(mode) {
       (value, index) => value === quizzes[index].correctAnswer
     ).length;
     // RESULT画面
+    tag += ' <h2 class="h2-display">Result</h2>';
+    quizzes.forEach((quiz, index) => {
+      tag +=
+        ' <div class="font-one-point-two">' +
+        '『' +
+        quiz.question +
+        '』' +
+        '</div>';
+      tag +=
+        '<div class="' +
+        (selectedList[index] === quiz.correctAnswer
+          ? 'text-correct'
+          : 'text-incorrect') +
+        '">';
+      tag +=
+        ' <div class="font-one-point-two right-text">' +
+        (selectedList[index] === quiz.correctAnswer ? '〇' : '✕') +
+        '</div>';
+      tag += '</div>';
+    });
     tag +=
-      ' <h2 class="center-text">Score：' +
+      ' <h2 class="center-text">' +
       correctCount +
       ' / ' +
       quizzesLength +
       '</h2>';
-    tag += ' <h2 class="h2-display">Result</h2>';
-    quizzes.forEach((quiz, index) => {
-      tag +=
-        ' <div class="font-one-point-five">Q.' +
-        (index + 1) +
-        '：' +
-        quiz.choices[quiz.correctAnswer] +
-        '→' +
-        (selectedList[index] === quiz.correctAnswer ? '〇' : '✕') +
-        '</div>';
-    });
     tag +=
       ' <button id="retry" onclick="createDisplay(display.TOP)" class="btn btn--purple btn--radius btn--cubic">RETRY</button>';
   }
