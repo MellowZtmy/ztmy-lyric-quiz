@@ -24,9 +24,13 @@ h1 {
   cursor: pointer;
 }
 
-h2.album-display{
+h2.h2-display{
   border-bottom: 2px dashed #000;
   padding-bottom: 5px;
+}
+
+.font-one-point-five {
+  font-size: 1.5rem;
 }
 
 /* ボタン用CSS */

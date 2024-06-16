@@ -26,7 +26,7 @@ var quizzes = [];
 // 現在のクイズインデックス
 var currentQuizIndex;
 // クイズ結果
-var resultList = [];
+var selectedList = [];
 
 /**
  * 【イベント処理】
@@ -63,7 +63,7 @@ function loadQuiz(isInit = false) {
       // 現在の問題初期化
       currentQuizIndex = 0;
       // 結果初期化
-      resultList = [];
+      selectedList = [];
       // クイズ作成
       quizzes = createQuizzes();
     }
@@ -79,12 +79,11 @@ function loadQuiz(isInit = false) {
 // 3. 選択肢タップ
 function onSelect(selected) {
   try {
-    // 結果取得
+    // クイズ取得
     var quiz = quizzes[currentQuizIndex];
-    var isCorrect = quiz.correctAnswer == selected;
 
     // 結果保持
-    resultList.push(isCorrect);
+    selectedList.push(selected);
 
     // ラジオボタン制御
     $('[name="choices"]').each(function () {
@@ -101,9 +100,8 @@ function onSelect(selected) {
       }
     });
 
-    // 最終問題かどうか
+    // 最終問題ではない場合次の問題へ
     if (quizzes[currentQuizIndex + 1]) {
-      // 今何問目かを加算
       currentQuizIndex++;
     }
     // NEXTボタン、RESULTボタン表示
@@ -262,7 +260,7 @@ function createDisplay(mode) {
     // アルバム、ミニアルバムリストより出題する曲リスト取得
     selectedSongIndex = getSelectedSongIndex();
 
-    tag += ' <h2 class="album-display">Albums</h2>';
+    tag += ' <h2 class="h2-display">Albums</h2>';
     albums.forEach(function (album, index) {
       tag +=
         ' <img src="' +
@@ -279,7 +277,7 @@ function createDisplay(mode) {
         '" onclick="clickAlbum(this)">';
     });
 
-    tag += ' <h2 class="album-display">Minialbums</h2>';
+    tag += ' <h2 class="h2-display">Minialbums</h2>';
     minialbums.forEach(function (album, index) {
       tag +=
         ' <img src="' +
@@ -347,47 +345,27 @@ function createDisplay(mode) {
     // 問題数取得
     var quizzesLength = quizzes.length;
     // 正解数取得
-    var correctCount = resultList.filter((element) => element).length;
+    var correctCount = selectedList.filter(
+      (value, index) => value === quizzes[index].correctAnswer
+    ).length;
     // RESULT画面
-    tag += ' <h2 class="album-display">Albums</h2>';
-    albums.forEach(function (album, index) {
-      tag +=
-        ' <img src="' +
-        appsettings.albumImagePath +
-        +(index + 1) +
-        '_' +
-        album +
-        '.jpg" id="' +
-        album +
-        '" name="album" alt="' +
-        album +
-        '" class="album' +
-        (selectedAlbums.includes(album) ? '' : ' darkened') +
-        '">';
-    });
-
-    tag += ' <h2 class="album-display">Minialbums</h2>';
-    minialbums.forEach(function (album, index) {
-      tag +=
-        ' <img src="' +
-        appsettings.minialbumImagePath +
-        (index + 1) +
-        '_' +
-        album +
-        '.jpg" id="' +
-        album +
-        '" name="minialbum" alt="' +
-        album +
-        '" class="album' +
-        (selectedMinialbums.includes(album) ? '' : ' darkened') +
-        '">';
-    });
     tag +=
-      ' <h2 class="center-text">' +
+      ' <h2 class="center-text">Score：' +
       correctCount +
       ' / ' +
       quizzesLength +
       '</h2>';
+    tag += ' <h2 class="h2-display">Result</h2>';
+    quizzes.forEach((quiz, index) => {
+      tag +=
+        ' <div class="font-one-point-five">Q.' +
+        (index + 1) +
+        '：' +
+        quiz.choices[quiz.correctAnswer] +
+        '→' +
+        (selectedList[index] === quiz.correctAnswer ? '〇' : '✕') +
+        '</div>';
+    });
     tag +=
       ' <button id="retry" onclick="createDisplay(display.TOP)" class="btn btn--purple btn--radius btn--cubic">RETRY</button>';
   }
