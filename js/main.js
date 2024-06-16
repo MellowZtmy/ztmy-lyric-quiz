@@ -378,7 +378,7 @@ function createDisplay(mode) {
       ' <button id="retry" onclick="createDisplay(display.TOP)" class="btn btn--purple btn--radius btn--cubic">RETRY</button>';
 
     // 全問正解の場合紙吹雪
-    if (true || correctCount === quizzesLength) {
+    if (correctCount === quizzesLength) {
       $('#confetti').prepend('<canvas></canvas>');
       dispConfetti();
     }
