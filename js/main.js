@@ -351,17 +351,6 @@ function createDisplay(mode) {
       (value, index) => value === quizzes[index].correctAnswer
     ).length;
     // RESULT画面
-    tag += ' <h2 class="h2-display">Result</h2>';
-    quizzes.forEach((quiz, index) => {
-      tag += ' <div class="font-one-point-two">『' + quiz.question + '』</div>';
-      tag +=
-        ' <div class="font-one-point-two right-text ' +
-        (selectedList[index] === quiz.correctAnswer ? 'text-correct' : '') +
-        '">' +
-        quiz.choices[quiz.correctAnswer] +
-        '</div>';
-      tag += index === quizzes.length - 1 ? '' : '<br>';
-    });
     tag +=
       ' <h2 class="center-text' +
       (correctCount === quizzesLength ? ' text-correct' : '') +
@@ -374,6 +363,17 @@ function createDisplay(mode) {
       correctCount === quizzesLength
         ? '<h2 class="center-text text-correct">PERFECT!!</h2>'
         : '';
+    tag += ' <h2 class="h2-display">Result</h2>';
+    quizzes.forEach((quiz, index) => {
+      tag += ' <div class="font-one-point-two">『' + quiz.question + '』</div>';
+      tag +=
+        ' <div class="font-one-point-two right-text ' +
+        (selectedList[index] === quiz.correctAnswer ? 'text-correct' : '') +
+        '">' +
+        quiz.choices[quiz.correctAnswer] +
+        '</div>';
+      tag += index === quizzes.length - 1 ? '' : '<br>';
+    });
     tag +=
       ' <button id="retry" onclick="createDisplay(display.TOP)" class="btn btn--purple btn--radius btn--cubic">RETRY</button>';
 
