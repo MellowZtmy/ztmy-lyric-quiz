@@ -130,7 +130,7 @@ function showResult() {
 // クイズ作成
 function createQuizzes() {
   // 選択アルバムの曲名取得
-  const songs = csvData[appsettings.songNameLine].filter((song, index) =>
+  const songs = csvData[appsettings.songNameLine].filter((_, index) =>
     selectedSongIndex.includes(index)
   );
   // 選択アルバムの歌詞取得
@@ -351,6 +351,7 @@ function createDisplay(mode) {
       (value, index) => value === quizzes[index].correctAnswer
     ).length;
     // RESULT画面
+    // 正解数表示
     tag +=
       ' <h2 class="center-text' +
       (correctCount === quizzesLength ? ' text-correct' : '') +
@@ -363,9 +364,15 @@ function createDisplay(mode) {
       correctCount === quizzesLength
         ? '<h2 class="center-text text-correct">PERFECT!!</h2>'
         : '';
+    // Result表示
     tag += ' <h2 class="h2-display">Result</h2>';
     quizzes.forEach((quiz, index) => {
-      tag += ' <div class="font-one-point-two">『' + quiz.question + '』</div>';
+      tag +=
+        ' <div class="font-one-point-two">Q' +
+        (index + 1) +
+        '. ' +
+        quiz.question +
+        '</div>';
       tag +=
         ' <div class="font-one-point-two right-text ' +
         (selectedList[index] === quiz.correctAnswer ? 'text-correct' : '') +
@@ -374,6 +381,45 @@ function createDisplay(mode) {
         '</div>';
       tag += index === quizzes.length - 1 ? '' : '<br>';
     });
+    // アルバム表示
+    tag +=
+      selectedMinialbums.length > 0
+        ? '<h2 class="h2-display">Minialbums</h2><div class="container">'
+        : '';
+    albums.forEach(function (album, index) {
+      if (selectedAlbums.includes(album)) {
+        tag +=
+          ' <img src="' +
+          appsettings.albumImagePath +
+          +(index + 1) +
+          '_' +
+          album +
+          '.jpg" id="' +
+          album +
+          '" name="album" alt="' +
+          album +
+          '" class="album">';
+      }
+    });
+    tag += selectedAlbums.length > 0 ? '</div>' : '';
+
+    selectedAlbums.length > 0 ? ' <h2 class="h2-display">Albums</h2>' : '';
+    minialbums.forEach(function (album, index) {
+      if (selectedMinialbums.includes(album)) {
+        tag +=
+          ' <img src="' +
+          appsettings.minialbumImagePath +
+          (index + 1) +
+          '_' +
+          album +
+          '.jpg" id="' +
+          album +
+          '" name="minialbum" alt="' +
+          album +
+          '" class="album">';
+      }
+    });
+    tag += selectedMinialbums.length > 0 ? '</div>' : '';
     tag +=
       ' <button id="retry" onclick="createDisplay(display.TOP)" class="btn btn--purple btn--radius btn--cubic">RETRY</button>';
 
