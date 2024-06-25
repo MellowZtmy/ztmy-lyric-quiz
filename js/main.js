@@ -104,9 +104,10 @@ function onSelect(selected) {
     if (quizzes[currentQuizIndex + 1]) {
       currentQuizIndex++;
     }
-    // NEXTボタン、RESULTボタン表示
+    // NEXTボタン、RESULTボタン、MV表示
     $('#next').removeClass('visibility-hidden');
     $('#result').removeClass('visibility-hidden');
+    $('#mv').removeClass('visibility-hidden');
   } catch (error) {
     // エラーハンドリング
     showError('Failed to show select:', error);
@@ -343,6 +344,33 @@ function createDisplay(mode) {
     tag += quizzes[currentQuizIndex + 1]
       ? '   <button id="next" onclick="loadQuiz()" class="btn btn--purple btn--radius btn--cubic visibility-hidden">NEXT→</button>'
       : '   <button id="result" onclick="showResult()" class="btn btn--purple btn--radius btn--cubic visibility-hidden">RESULT</button>';
+    // MV表示
+    tag += '    <!--MV Youtube--> ';
+    tag += '    <div class="margin-top-20 visibility-hidden" id="mv"> ';
+    tag +=
+      '      <div style="position: relative; width: 100%; padding-bottom: 56.25%"> ';
+    tag += '        <div ';
+    tag += '          style=" ';
+    tag += '            position: absolute; ';
+    tag += '            top: 0px; ';
+    tag += '            left: 0px; ';
+    tag += '            width: 100%; ';
+    tag += '            height: 100%; ';
+    tag += '          " ';
+    tag += '        > ';
+    tag += '          <iframe ';
+    tag += '            src="https://www.youtube.com/embed/3iAXclHlTTg" ';
+    tag += '            frameborder="0" ';
+    tag += '            width="100%" ';
+    tag += '            height="100%" ';
+    tag +=
+      '            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" ';
+    tag += '            allowfullscreen="" ';
+    tag += '            data-gtm-yt-inspected-32118529_704="true" ';
+    tag += '          ></iframe> ';
+    tag += '        </div> ';
+    tag += '      </div> ';
+    tag += '    </div> ';
   } else if (mode === display.RESULT) {
     // 問題数取得
     var quizzesLength = quizzes.length;
