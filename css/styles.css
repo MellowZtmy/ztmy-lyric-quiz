@@ -128,11 +128,6 @@ input[type=radio] {
   filter: brightness(0.3);
 }
 
-.container {
-  display: grid;
-  justify-content: center;
-}
-
 /* 画面表示用CSS */
 .margin-top-20 {
   margin: 20px auto auto auto;

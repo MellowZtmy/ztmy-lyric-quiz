@@ -384,7 +384,7 @@ function createDisplay(mode) {
     // アルバム表示
     tag +=
       selectedMinialbums.length > 0
-        ? '<h2 class="h2-display">Minialbums</h2><div class="container">'
+        ? '<h2 class="h2-display">Minialbums</h2>'
         : '';
     albums.forEach(function (album, index) {
       if (selectedAlbums.includes(album)) {
@@ -401,7 +401,6 @@ function createDisplay(mode) {
           '" class="album">';
       }
     });
-    tag += selectedAlbums.length > 0 ? '</div>' : '';
 
     selectedAlbums.length > 0 ? ' <h2 class="h2-display">Albums</h2>' : '';
     minialbums.forEach(function (album, index) {
@@ -419,7 +418,6 @@ function createDisplay(mode) {
           '" class="album">';
       }
     });
-    tag += selectedMinialbums.length > 0 ? '</div>' : '';
     tag +=
       ' <button id="retry" onclick="createDisplay(display.TOP)" class="btn btn--purple btn--radius btn--cubic">RETRY</button>';
 
