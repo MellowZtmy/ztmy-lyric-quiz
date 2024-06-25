@@ -139,6 +139,10 @@ function createQuizzes() {
   csvData.slice(appsettings.lyricsStartLine).forEach((lyric) => {
     lyrics.push(lyric.filter((_, index) => selectedSongIndex.includes(index)));
   });
+  // 曲の動画ID取得
+  const mvIds = csvData[appsettings.mvIdLine].filter((_, index) =>
+    selectedSongIndex.includes(index)
+  );
   // 問題数取得
   const quizzesLength = songs.length;
   // 選択肢数取得
@@ -167,6 +171,8 @@ function createQuizzes() {
   let choices = [[]];
   // 正解選択肢リスト
   let correctAnswers = [];
+  // MVIDリスト
+  let mvIdList = [];
 
   // 問題数分処理する
   for (let i = 0; i < quizzesLength; i++) {
@@ -184,6 +190,8 @@ function createQuizzes() {
       if (song !== '' && !songList.includes(song)) {
         // 正解の曲リストに曲追加
         songList.push(song);
+        // mvID追加
+        mvIdList.push(mvIds[songIndex]);
         break;
       }
     }
@@ -242,6 +250,7 @@ function createQuizzes() {
     question: question,
     correctAnswer: correctAnswers[index],
     choices: choices[index],
+    mvId: mvIdList[index],
   }));
 }
 
@@ -359,7 +368,7 @@ function createDisplay(mode) {
     tag += '          " ';
     tag += '        > ';
     tag += '          <iframe ';
-    tag += '            src="https://www.youtube.com/embed/3iAXclHlTTg" ';
+    tag += '            src="https://www.youtube.com/embed/' + quiz.mvId + '" ';
     tag += '            frameborder="0" ';
     tag += '            width="100%" ';
     tag += '            height="100%" ';
