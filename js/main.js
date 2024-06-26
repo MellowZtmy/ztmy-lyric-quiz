@@ -368,7 +368,12 @@ function createDisplay(mode) {
     tag += '          " ';
     tag += '        > ';
     tag += '          <iframe ';
-    tag += '            src="https://www.youtube.com/embed/' + quiz.mvId + '" ';
+    tag +=
+      '            src="https://www.youtube.com/embed/' +
+      quiz.mvId +
+      '?loop=1&playlist=' +
+      quiz.mvId +
+      '" ';
     tag += '            frameborder="0" ';
     tag += '            width="100%" ';
     tag += '            height="100%" ';
