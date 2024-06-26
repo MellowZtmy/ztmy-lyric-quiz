@@ -420,9 +420,7 @@ function createDisplay(mode) {
     });
     // アルバム表示
     tag +=
-      selectedMinialbums.length > 0
-        ? '<h2 class="h2-display">Minialbums</h2>'
-        : '';
+      selectedAlbums.length > 0 ? ' <h2 class="h2-display">Albums</h2>' : '';
     albums.forEach(function (album, index) {
       if (selectedAlbums.includes(album)) {
         tag +=
@@ -439,7 +437,10 @@ function createDisplay(mode) {
       }
     });
 
-    selectedAlbums.length > 0 ? ' <h2 class="h2-display">Albums</h2>' : '';
+    tag +=
+      selectedMinialbums.length > 0
+        ? '<h2 class="h2-display">Minialbums</h2>'
+        : '';
     minialbums.forEach(function (album, index) {
       if (selectedMinialbums.includes(album)) {
         tag +=
