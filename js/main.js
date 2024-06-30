@@ -94,9 +94,11 @@ function onSelect(selected) {
       if (value == quiz.correctAnswer) {
         // 正解の択
         $(this).parent().addClass('label-correct');
+        $('#marubatu' + value).append('〇');
       } else if (value == selected) {
         // 不正解の択(選んだ時だけ)
         $(this).parent().addClass('label-incorrect');
+        $('#marubatu' + value).append('✕');
       }
     });
 
@@ -343,7 +345,15 @@ function createDisplay(mode) {
       tag += '       name="choices"';
       tag += '       onchange="onSelect(' + index + ')"';
       tag += '     >';
-      tag += '     ' + choice + '';
+      tag += '     <span class="left-text">';
+      tag += '     ' + choice;
+      tag += '     </span>';
+      tag +=
+        '     <span id="marubatu' +
+        index +
+        '" class="right-text bold-text font-one-point-five">';
+      tag += '     ';
+      tag += '     </span>';
       tag += '   </label>';
       tag += ' ';
     });

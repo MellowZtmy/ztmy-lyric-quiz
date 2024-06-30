@@ -13,8 +13,16 @@ body {
     flex-grow: 1;
 }
 
+.left-text {
+  text-align: left;
+}
+
 .right-text {
     text-align: right;
+}
+
+.bold-text {
+  font-weight: bold;
 }
 
 h1 {
@@ -97,24 +105,26 @@ input[type=radio] {
 }
 
 .choice-radio-label {
-  display: block; /* ブロックレベル要素化する */
+  display: flex; /* ブロックレベル要素化する */
   line-height: 45px; /* 行の高さを指定する */
   height: 50px; /* ボックスの高さを指定する */
   padding-left: 20px; /* ボックス内左側の余白を指定する */
-  padding-right: 5px; /* ボックス内御右側の余白を指定する */
+  padding-right: 10px; /* ボックス内御右側の余白を指定する */
   border: 2px solid black;/* ボックスの境界線を実線で指定する */
   border-radius: 25px; /* 角丸を指定する */
   font-size: 1.2em;
+  justify-content: space-between; /* テキストを右寄せするための設定 */
+  align-items: center; /* 垂直方向の中央揃え */
 }
 
 .label-correct {
-  color: #0f5132;
-  background-color: #d1e7dd;
+  color: #ff1c1c;
+  background-color: #e7d1d1;
 }
 
 .label-incorrect {
-  color: #FF0000;
-  background-color: #F6CEEC;
+  color: #1100ff;
+  background-color: #a4e1ff;
 }
 
 /* 画像用CSS */
