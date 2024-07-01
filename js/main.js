@@ -406,7 +406,19 @@ function createDisplay(mode) {
     // 正解数表示
 
     // ひとこと
-    var indexRow = getRamdomNumber(acaneWords.length);
+    var correctRate = (correctCount / quizzesLength) * 100;
+    var indexRow;
+    if (correctRate == 100) {
+      indexRow = 0;
+    } else if (correctRate > 90) {
+      indexRow = 1;
+    } else if (correctRate > 80) {
+      indexRow = 2;
+    } else if (correctRate > 60) {
+      indexRow = 3;
+    } else {
+      indexRow = 4;
+    }
     var indexCol = getRamdomNumber(acaneWords[indexRow].length);
     var dispWord = acaneWords[indexRow][indexCol];
     tag +=
