@@ -404,6 +404,11 @@ function createDisplay(mode) {
     ).length;
     // RESULT画面
     // 正解数表示
+
+    // ひとこと
+    var indexRow = getRamdomNumber(acaneWords.length);
+    var indexCol = getRamdomNumber(acaneWords[indexRow].length);
+    var dispWord = acaneWords[indexRow][indexCol];
     tag +=
       ' <h2 class="center-text' +
       (correctCount === quizzesLength ? ' text-correct' : '') +
@@ -471,6 +476,9 @@ function createDisplay(mode) {
           '" class="album">';
       }
     });
+
+    tag += '<h2 class="h2-display font-one-point-two">ひとこと</h2>';
+    tag += '<div class="font-one-point-two">' + dispWord + '</div>';
     tag +=
       ' <button id="retry" onclick="createDisplay(display.TOP)" class="btn btn--purple btn--radius btn--cubic">RETRY</button>';
 
