@@ -404,23 +404,6 @@ function createDisplay(mode) {
     ).length;
     // RESULT画面
     // 正解数表示
-
-    // ひとこと
-    var correctRate = (correctCount / quizzesLength) * 100;
-    var indexRow;
-    if (correctRate == 100) {
-      indexRow = 0;
-    } else if (correctRate > 90) {
-      indexRow = 1;
-    } else if (correctRate > 80) {
-      indexRow = 2;
-    } else if (correctRate > 60) {
-      indexRow = 3;
-    } else {
-      indexRow = 4;
-    }
-    var indexCol = getRamdomNumber(acaneWords[indexRow].length);
-    var dispWord = acaneWords[indexRow][indexCol];
     tag +=
       ' <h2 class="center-text' +
       (correctCount === quizzesLength ? ' text-correct' : '') +
@@ -489,16 +472,18 @@ function createDisplay(mode) {
       }
     });
 
-    //tag += '<h2 class="h2-display font-one-point-two">ひとこと</h2>';
-    //tag += '<div class="font-one-point-two">' + dispWord + '</div>';
-    tag +=
-      ' <button id="retry" onclick="createDisplay(display.TOP)" class="btn btn--purple btn--radius btn--cubic">RETRY</button>';
-
-    // 全問正解の場合紙吹雪
+    // 全問正解の場合紙吹雪、ひとこと
     if (correctCount === quizzesLength) {
+      tag += '<h2 class="h2-display font-one-point-two">ひとこと</h2>';
+      tag +=
+        '<div class="font-one-point-two">' +
+        acaneWords[0][getRamdomNumber(acaneWords[0].length)] +
+        '</div>';
       $('#confetti').prepend('<canvas></canvas>');
       dispConfetti();
     }
+    tag +=
+      ' <button id="retry" onclick="createDisplay(display.TOP)" class="btn btn--purple btn--radius btn--cubic">RETRY</button>';
   }
 
   // タグ流し込み
