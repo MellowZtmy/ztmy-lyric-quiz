@@ -10,22 +10,22 @@ function getJsonData(jsonUrl) {
 }
 
 // CSVデータを取得する関数
-async function fetchCsvData(fileName) {
+async function fetchCsvData(fileName, skipRowCount = 0) {
   try {
     const response = await fetch(fileName);
     const text = await response.text();
-    return parseCsv(text);
+    return parseCsv(text, skipRowCount);
   } catch (error) {
     throw new Error('Failed to load CSV file:' + fileName);
   }
 }
 
 // CSVデータをパースする関数
-function parseCsv(csvText) {
+function parseCsv(csvText, skipRowCount) {
   const lines = csvText.trim().split(/\r?\n|\r/);
   const data = [];
 
-  for (let i = 0; i < lines.length; i++) {
+  for (let i = skipRowCount; i < lines.length; i++) {
     const line = lines[i];
     const row = [];
 
@@ -66,6 +66,16 @@ function shuffle(array) {
 // 乱数生成
 function getRamdomNumber(num) {
   return Math.floor(Math.random() * num);
+}
+
+// データをローカルストレージにセットする関数
+function setLocal(key, value) {
+  localStorage.setItem(key, value);
+}
+
+// ローカルストレージからデータをゲットする関数
+function getLocal(key) {
+  return localStorage.getItem(key);
 }
 
 // ローカルストレージから配列を取得(nullは空に)
@@ -126,4 +136,22 @@ function getSelectedSongIndex() {
       ...getMatchingIndices(songMinialbums, selectedMinialbums),
     ])
   );
+}
+
+// カラーチェンジ
+function changeColor(plusCount) {
+  // 今のカラーインデックスを取得し、次のインデックス設定
+  var colorIndex = Number(getLocal('colorIndex') ?? 0) + plusCount;
+  // 設定するカラーを設定（ない場合最初に戻る）
+  var colorSet = colorSets[colorIndex] ?? colorSets[0];
+  $('body').css({
+    'background-color': colorSet[1],
+    color: colorSet[2],
+  });
+  $('.btn--main').css({
+    'background-color': colorSet[3],
+    color: colorSet[4],
+  });
+  // 今のカラー設定をローカルストレージに保存
+  setLocal('colorIndex', colorSets[colorIndex] ? colorIndex : 0);
 }

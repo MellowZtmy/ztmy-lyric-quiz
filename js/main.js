@@ -11,6 +11,10 @@ const display = {
 var appsettings = [];
 // 歌詞ファイル情報
 var csvData = [];
+// ひとこと
+var acaneWords = [];
+// カラーセット
+var colorSets = [];
 // アルバム名リスト
 var songAlbums = [];
 var selectedAlbums = [];
@@ -47,7 +51,10 @@ $(document).ready(async function () {
     // 3. ACAねさんのひとこと読み込み
     acaneWords = await fetchCsvData(appsettings.acaneWordsFileName);
 
-    // 4. 開始画面を表示
+    // 4. カラーセット読み込み
+    colorSets = await fetchCsvData(appsettings.colorSetsFileName, 1);
+
+    // 5. 開始画面を表示
     createDisplay(display.TOP);
   } catch (error) {
     // エラーハンドリング
@@ -311,10 +318,12 @@ function createDisplay(mode) {
       ' Songs</h2>';
     tag += '<button id="start"';
     tag += '  onclick="loadQuiz(true)"';
-    tag += '  class="btn btn--purple btn--radius btn--cubic bottom-button"';
+    tag += '  class="btn btn--main btn--radius btn--cubic bottom-button"';
     tag += '>';
     tag += '  START';
     tag += '</button>';
+    tag +=
+      ' <h2 class="center-text margin-top-20" onclick="changeColor(1)">Color ↺</h2>';
 
     // 紙吹雪解除
     $('canvas')?.remove();
@@ -361,8 +370,8 @@ function createDisplay(mode) {
     tag += ' ';
     tag += ' <!-- 次へ / 終了 ボタン -->';
     tag += quizzes[currentQuizIndex + 1]
-      ? '   <button id="next" onclick="loadQuiz()" class="btn btn--purple btn--radius btn--cubic visibility-hidden">NEXT→</button>'
-      : '   <button id="result" onclick="showResult()" class="btn btn--purple btn--radius btn--cubic visibility-hidden">RESULT</button>';
+      ? '   <button id="next" onclick="loadQuiz()" class="btn btn--main btn--radius btn--cubic visibility-hidden">NEXT→</button>'
+      : '   <button id="result" onclick="showResult()" class="btn btn--main btn--radius btn--cubic visibility-hidden">RESULT</button>';
     // MV表示
     tag += '    <!--MV Youtube--> ';
     tag += '    <div class="margin-top-20 visibility-hidden" id="mv"> ';
@@ -483,9 +492,12 @@ function createDisplay(mode) {
       dispConfetti();
     }
     tag +=
-      ' <button id="retry" onclick="createDisplay(display.TOP)" class="btn btn--purple btn--radius btn--cubic">RETRY</button>';
+      ' <button id="retry" onclick="createDisplay(display.TOP)" class="btn btn--main btn--radius btn--cubic">RETRY</button>';
   }
 
   // タグ流し込み
   $('#display').append(tag);
+
+  // CSS適用
+  changeColor(0);
 }
