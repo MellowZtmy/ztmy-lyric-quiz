@@ -489,8 +489,8 @@ function createDisplay(mode) {
       }
     });
 
-    tag += '<h2 class="h2-display font-one-point-two">ひとこと</h2>';
-    tag += '<div class="font-one-point-two">' + dispWord + '</div>';
+    //tag += '<h2 class="h2-display font-one-point-two">ひとこと</h2>';
+    //tag += '<div class="font-one-point-two">' + dispWord + '</div>';
     tag +=
       ' <button id="retry" onclick="createDisplay(display.TOP)" class="btn btn--purple btn--radius btn--cubic">RETRY</button>';
 
