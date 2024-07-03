@@ -145,7 +145,7 @@ function changeColor(plusCount) {
   // 設定するカラーを設定（ない場合最初に戻る）
   var colorSet = colorSets[colorIndex] ?? colorSets[0];
   $('body').css({
-    'background-color': colorSet[1],
+    background: colorSet[1],
     color: colorSet[2],
   });
   $('.btn--main').css({
