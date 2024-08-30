@@ -20,36 +20,14 @@ async function fetchCsvData(fileName, skipRowCount = 0) {
   }
 }
 
-// CSVデータをパースする関数
+// CSVデータをパースする関数（csvデータ内の「,」は「，」にしているため「,」に変換して返却）
 function parseCsv(csvText, skipRowCount) {
-  const lines = csvText.trim().split(/\r?\n|\r/);
-  const data = [];
-
-  for (let i = skipRowCount; i < lines.length; i++) {
-    const line = lines[i];
-    const row = [];
-
-    let insideQuotes = false;
-    let value = '';
-
-    for (let j = 0; j < line.length; j++) {
-      const char = line.charAt(j);
-
-      if (char === '"') {
-        insideQuotes = !insideQuotes;
-      } else if (char === ',' && !insideQuotes) {
-        row.push(value);
-        value = '';
-      } else {
-        value += char;
-      }
-    }
-
-    row.push(value);
-    data.push(row);
-  }
-
-  return data;
+  var regx = new RegExp(appsettings.commaInString, 'g');
+  return csvText
+    .trim()
+    .split(/\r?\n|\r/)
+    .slice(skipRowCount)
+    .map((line) => line.split(',').map((value) => value.replace(regx, ',')));
 }
 
 // 配列をシャッフルして返す
