@@ -131,5 +131,10 @@ function changeColor(plusCount) {
     color: colorSet[4],
   });
   // 今のカラー設定をローカルストレージに保存
-  setLocal('colorIndex', colorSets[colorIndex] ? colorIndex : 0);
+  var colorIndexNow = colorSets[colorIndex] ? colorIndex : 0;
+  setLocal('colorIndex', colorIndexNow);
+  // 今のカラー表示
+  $('#changeColor').html(
+    'Color ↺ <br>(' + (colorIndexNow + 1) + '/' + colorSets.length + ')'
+  );
 }

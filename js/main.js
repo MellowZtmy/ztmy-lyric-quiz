@@ -323,7 +323,7 @@ function createDisplay(mode) {
     tag += '  START';
     tag += '</button>';
     tag +=
-      ' <h2 class="center-text margin-top-20" onclick="changeColor(1)">Color ↺</h2>';
+      ' <h2 id="changeColor" class="center-text margin-top-20" onclick="changeColor(1)">Color ↺</h2>';
 
     // 紙吹雪解除
     $('canvas')?.remove();
