@@ -116,7 +116,7 @@ function onSelect(selected) {
     // NEXTボタン、RESULTボタン、MV表示
     $('#next').removeClass('visibility-hidden');
     $('#result').removeClass('visibility-hidden');
-    $('#mv').removeClass('visibility-hidden');
+    $('#mv').show();
   } catch (error) {
     // エラーハンドリング
     showError('Failed to show select:', error);
@@ -279,6 +279,7 @@ function createDisplay(mode) {
     // アルバム、ミニアルバムリストより出題する曲リスト取得
     selectedSongIndex = getSelectedSongIndex();
 
+    tag += ' <p class="right-text">' + appsettings.version + '</p>';
     tag += ' <h2 class="h2-display">Albums</h2>';
     albums.forEach(function (album, index) {
       tag +=
@@ -374,7 +375,7 @@ function createDisplay(mode) {
       : '   <button id="result" onclick="showResult()" class="btn btn--main btn--radius btn--cubic visibility-hidden">RESULT</button>';
     // MV表示
     tag += '    <!--MV Youtube--> ';
-    tag += '    <div class="margin-top-20 visibility-hidden" id="mv"> ';
+    tag += '    <div class="margin-top-20" id="mv" hidden> ';
     tag +=
       '      <div style="position: relative; width: 100%; padding-bottom: 56.25%"> ';
     tag += '        <div ';
