@@ -501,4 +501,10 @@ function createDisplay(mode) {
 
   // CSS適用
   changeColor(0);
+
+  // 一番上にスクロール
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth',
+  });
 }
