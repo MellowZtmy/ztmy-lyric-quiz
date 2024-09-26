@@ -505,6 +505,5 @@ function createDisplay(mode) {
   // 一番上にスクロール
   window.scrollTo({
     top: 0,
-    behavior: 'smooth',
   });
 }
