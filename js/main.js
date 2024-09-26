@@ -328,6 +328,11 @@ function createDisplay(mode) {
 
     // 紙吹雪解除
     $('canvas')?.remove();
+
+    // 一番上にスクロール
+    window.scrollTo({
+      top: 0,
+    });
   } else if (mode === display.QUIZ) {
     // QUIZ画面の場合
     var quiz = quizzes[currentQuizIndex];
@@ -501,9 +506,4 @@ function createDisplay(mode) {
 
   // CSS適用
   changeColor(0);
-
-  // 一番上にスクロール
-  window.scrollTo({
-    top: 0,
-  });
 }
