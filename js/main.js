@@ -279,7 +279,6 @@ function createDisplay(mode) {
     // アルバム、ミニアルバムリストより出題する曲リスト取得
     selectedSongIndex = getSelectedSongIndex();
 
-    tag += ' <p class="right-text">' + appsettings.version + '</p>';
     tag += ' <h2 class="h2-display">Albums</h2>';
     albums.forEach(function (album, index) {
       tag +=
@@ -325,6 +324,7 @@ function createDisplay(mode) {
     tag += '</button>';
     tag +=
       ' <h2 id="changeColor" class="center-text margin-top-20" onclick="changeColor(1)">Color ↺</h2>';
+    tag += ' <p class="right-text">' + appsettings.version + '</p>';
 
     // 紙吹雪解除
     $('canvas')?.remove();
