@@ -401,11 +401,8 @@ function createDisplay(mode) {
       '" ';
     tag += '            frameborder="0" ';
     tag += '            width="100%" ';
-    tag += '            height="100%" ';
-    tag +=
-      '            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" ';
+    tag += '            height="100%"  style="border-radius: 15px;"';
     tag += '            allowfullscreen="" ';
-    tag += '            data-gtm-yt-inspected-32118529_704="true" ';
     tag += '          ></iframe> ';
     tag += '        </div> ';
     tag += '      </div> ';
