@@ -119,7 +119,8 @@ function getSelectedSongIndex() {
 // カラーチェンジ
 function changeColor(plusCount) {
   // 今のカラーインデックスを取得し、次のインデックス設定
-  var colorIndex = Number(getLocal('colorIndex') ?? 0) + plusCount;
+  var colorIndex =
+    Number(getLocal('colorIndex') ?? colorSets.length - 1) + plusCount;
   // 設定するカラーを設定（ない場合最初に戻る）
   var colorSet = colorSets[colorIndex] ?? colorSets[0];
   $('body').css({
