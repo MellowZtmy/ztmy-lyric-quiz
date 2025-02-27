@@ -326,8 +326,9 @@ function createDisplay(mode) {
       ' <h2 id="changeColor" class="center-text margin-top-20" onclick="changeColor(1)">Color ↺</h2>';
     tag += ' <p class="right-text">' + appsettings.version + '</p>';
     // 引用表示
-    tag += ' <div class="center-text">----References----';
-    tag += ' <div>ZUTOMAYO公式様：https://zutomayo.net/</div>';
+    tag += ' <div class="center-text">';
+    tag += '     <div>----References----</div>';
+    tag += '     <div>ZUTOMAYO公式様：https://zutomayo.net/</div>';
     tag += ' </div>';
 
     // 紙吹雪解除
