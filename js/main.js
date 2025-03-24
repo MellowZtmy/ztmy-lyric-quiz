@@ -54,8 +54,16 @@ $(document).ready(async function () {
     // 4. カラーセット読み込み
     colorSets = await fetchCsvData(appsettings.colorSetsFileName, 1);
 
+    // バージョンアップしていればカラー初期化
+    if (appsettings.version !== getLocal('version')) {
+      removeLocal('colorIndex');
+    }
+
     // 5. 開始画面を表示
     createDisplay(display.TOP);
+
+    // バージョン保存
+    setLocal('version', appsettings.version);
   } catch (error) {
     // エラーハンドリング
     showError('Failed to load data:', error);
@@ -324,7 +332,7 @@ function createDisplay(mode) {
     tag += '</button>';
     tag +=
       ' <h2 id="changeColor" class="center-text margin-top-20" onclick="changeColor(1)">Color ↺</h2>';
-    tag += ' <p class="right-text">' + appsettings.version + '</p>';
+    tag += ' <p class="right-text">ver. ' + appsettings.version + '</p>';
     // 引用表示
     tag += ' <div class="center-text">';
     tag += '     <div>----References----</div>';

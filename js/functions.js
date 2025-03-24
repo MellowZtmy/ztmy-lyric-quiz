@@ -46,6 +46,11 @@ function getRamdomNumber(num) {
   return Math.floor(Math.random() * num);
 }
 
+// データをローカルストレージからクリアする関数
+function removeLocal(key) {
+  localStorage.removeItem(key);
+}
+
 // データをローカルストレージにセットする関数
 function setLocal(key, value) {
   localStorage.setItem(key, value);
@@ -118,7 +123,7 @@ function getSelectedSongIndex() {
 
 // カラーチェンジ
 function changeColor(plusCount) {
-  // 今のカラーインデックスを取得し、次のインデックス設定
+  // 今のカラーインデックスを取得し、次のインデックス設定（ない場合最新のもの）
   var colorIndex =
     Number(getLocal('colorIndex') ?? colorSets.length - 1) + plusCount;
   // 設定するカラーを設定（ない場合最初に戻る）
