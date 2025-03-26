@@ -287,6 +287,11 @@ function createDisplay(mode) {
     // アルバム、ミニアルバムリストより出題する曲リスト取得
     selectedSongIndex = getSelectedSongIndex();
 
+    // ハイスコア表示
+    tag +=
+      ' <p class="right-text">High Score : ' +
+      (getLocal('ztmyLyricQuizHighScore') ?? '-') +
+      '</p>';
     tag += ' <h2 class="h2-display">Albums</h2>';
     albums.forEach(function (album, index) {
       tag +=
@@ -332,11 +337,11 @@ function createDisplay(mode) {
     tag += '</button>';
     tag +=
       ' <h2 id="changeColor" class="center-text margin-top-20" onclick="changeColor(1)">Color ↺</h2>';
-    tag += ' <p class="right-text">ver. ' + appsettings.version + '</p>';
-    // 引用表示
-    tag += ' <div class="center-text">';
-    tag += '     <div>----References----</div>';
-    tag += '     <div>ZUTOMAYO公式様：https://zutomayo.net/</div>';
+    // tag += ' <p class="right-text">ver. ' + appsettings.version + '</p>';
+    // // 引用表示
+    // tag += ' <div class="center-text">';
+    // tag += '     <div>----References----</div>';
+    // tag += '     <div>ZUTOMAYO公式様：https://zutomayo.net/</div>';
     tag += ' </div>';
 
     // 紙吹雪解除
@@ -509,6 +514,11 @@ function createDisplay(mode) {
     }
     tag +=
       ' <button id="retry" onclick="createDisplay(display.TOP)" class="btn btn--main btn--radius btn--cubic">RETRY</button>';
+
+    // ハイスコア設定
+    if (getLocal('ztmyLyricQuizHighScore') ?? 0 < correctCount) {
+      setLocal('ztmyLyricQuizHighScore', correctCount);
+    }
   }
 
   // タグ流し込み
