@@ -7,6 +7,11 @@ const display = {
   QUIZ: 2,
   RESULT: 3,
 };
+// ゲームモード
+const gameMode = {
+  OMOTE: '1',
+  URA: '2',
+};
 // 設定ファイル情報
 var appsettings = [];
 // 歌詞ファイル情報
@@ -31,6 +36,8 @@ var quizzes = [];
 var currentQuizIndex;
 // クイズ結果
 var selectedList = [];
+// 現在のゲームモード
+var currentGameMode = '';
 
 /**
  * 【イベント処理】
@@ -59,10 +66,15 @@ $(document).ready(async function () {
       removeLocal('colorIndex');
     }
 
+    // ゲームモード取得
+    currentGameMode = new URL(window.location.href).searchParams.get(
+      'gameMode'
+    );
+
     // 5. 開始画面を表示
     createDisplay(display.TOP);
 
-    // バージョン保存
+    // 6. バージョン保存
     setLocal('version', appsettings.version);
   } catch (error) {
     // エラーハンドリング
@@ -337,11 +349,6 @@ function createDisplay(mode) {
     tag += '</button>';
     tag +=
       ' <h2 id="changeColor" class="center-text margin-top-20" onclick="changeColor(1)">Color ↺</h2>';
-    // tag += ' <p class="right-text">ver. ' + appsettings.version + '</p>';
-    // // 引用表示
-    // tag += ' <div class="center-text">';
-    // tag += '     <div>----References----</div>';
-    // tag += '     <div>ZUTOMAYO公式様：https://zutomayo.net/</div>';
     tag += ' </div>';
 
     // 紙吹雪解除
