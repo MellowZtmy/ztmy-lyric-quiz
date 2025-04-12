@@ -244,14 +244,21 @@ function createQuizzes() {
 
       choices[i][0] = correctLyric;
 
+      let usedWrongSongIndexes = [songIndex]; // 正解曲インデックスを除外する
+
       for (let j = 1; j < choiceLength; j++) {
         while (true) {
           const wrongSongIndex = getRamdomNumber(songs.length);
+
+          // 正解と同じ曲の歌詞はスキップ
+          if (usedWrongSongIndexes.includes(wrongSongIndex)) continue;
+
           const lyricsIndex = getRamdomNumber(lyrics.length);
           const wrongLyric = lyrics[lyricsIndex][wrongSongIndex];
 
           if (wrongLyric !== '' && !choices[i].includes(wrongLyric)) {
             choices[i][j] = wrongLyric;
+            usedWrongSongIndexes.push(wrongSongIndex);
             break;
           }
         }
