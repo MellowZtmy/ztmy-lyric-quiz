@@ -164,7 +164,7 @@ function createQuizzes() {
     selectedSongIndex.includes(index)
   );
   // 選択アルバムの歌詞取得
-  var lyrics = [];
+  const lyrics = [];
   csvData.slice(appsettings.lyricsStartLine).forEach((lyric) => {
     lyrics.push(lyric.filter((_, index) => selectedSongIndex.includes(index)));
   });
@@ -194,8 +194,8 @@ function createQuizzes() {
   // 各変数初期化
   // 問題歌詞リスト
   let questions = [];
-  // 正解曲リスト
-  let songList = [];
+  // 正解リスト
+  let answerList = []; // 正解（曲名 or 歌詞）
   // 選択肢リスト(2次元配列)
   let choices = [[]];
   // 正解選択肢リスト
@@ -216,64 +216,96 @@ function createQuizzes() {
       song = songs[songIndex];
 
       // 曲名が取得でき被っていない場合正解曲決定
-      if (song !== '' && !songList.includes(song)) {
+      if (song !== '' && !answerList.includes(song)) {
         // 正解の曲リストに曲追加
-        songList.push(song);
+        answerList.push(song); // 歌詞モードでもベースは曲
         // mvID追加
         mvIdList.push(mvIds[songIndex]);
         break;
       }
     }
 
-    // 2. 選択肢曲作成
-    // まず正解の曲格納
+    // 選択肢作成
     choices[i] = [];
-    choices[i][0] = song;
-
-    // 残りの選択肢を作成
-    for (let j = 1; j < choiceLength; j++) {
-      // 不正解曲設定
+    if (currentGameMode === gameMode.URA) {
+      // 曲から歌詞を当てる
+      // 正解の歌詞
+      let correctLyric = '';
       while (true) {
-        // 乱数生成し、曲を設定
-        const wrongSongIndex = getRamdomNumber(songs.length);
+        const lyricsIndex = getRamdomNumber(lyrics.length);
+        correctLyric = lyrics[lyricsIndex][songIndex];
+        if (
+          correctLyric !== '' &&
+          (appsettings.allowSameSong || !choices.flat().includes(correctLyric))
+        ) {
+          break;
+        }
+      }
 
-        // 不正解曲取得
-        const wrongSong = songs[wrongSongIndex];
+      choices[i][0] = correctLyric;
 
-        // 曲名が取得でき被っていない場合選択肢決定
-        if (wrongSong !== '' && !choices[i].includes(wrongSong)) {
-          // 選択肢に設定
-          choices[i][j] = wrongSong;
+      for (let j = 1; j < choiceLength; j++) {
+        while (true) {
+          const wrongSongIndex = getRamdomNumber(songs.length);
+          const lyricsIndex = getRamdomNumber(lyrics.length);
+          const wrongLyric = lyrics[lyricsIndex][wrongSongIndex];
+
+          if (wrongLyric !== '' && !choices[i].includes(wrongLyric)) {
+            choices[i][j] = wrongLyric;
+            break;
+          }
+        }
+      }
+
+      choices[i] = shuffle(choices[i]);
+      correctAnswers.push(choices[i].indexOf(correctLyric));
+      questions.push(song); // 問題文には曲名を使う
+    } else {
+      // 歌詞から曲を当てる（元のモード）
+      choices[i][0] = song;
+
+      for (let j = 1; j < choiceLength; j++) {
+        while (true) {
+          const wrongSongIndex = getRamdomNumber(songs.length);
+          const wrongSong = songs[wrongSongIndex];
+          if (wrongSong !== '' && !choices[i].includes(wrongSong)) {
+            choices[i][j] = wrongSong;
+            break;
+          }
+        }
+      }
+
+      choices[i] = shuffle(choices[i]);
+      correctAnswers.push(choices[i].indexOf(song));
+
+      // 3. 問題文歌詞作成
+      while (true) {
+        // 乱数生成し、問題文の歌詞を設定
+        const lyricsIndex = getRamdomNumber(lyrics.length);
+
+        // 歌詞取得
+        const lyric = lyrics[lyricsIndex][songIndex];
+
+        // 問題文が取得でき、被っていない場合歌詞決定
+        if (
+          lyric !== '' &&
+          (appsettings.allowSameSong || !questions.includes(lyric))
+        ) {
+          questions.push(lyric); // 問題文に歌詞を使う
           break;
         }
       }
     }
-
-    // 選択肢シャッフル
-    choices[i] = shuffle(choices[i]);
-
-    // 正解選択肢リストに格納
-    correctAnswers.push(choices[i].indexOf(song));
-
-    // 3. 問題文歌詞作成
-    while (true) {
-      // 乱数生成し、問題文の歌詞を設定
-      const lyricsIndex = getRamdomNumber(lyrics.length);
-
-      // 歌詞取得
-      const lyric = lyrics[lyricsIndex][songIndex];
-
-      // 問題文が取得でき、被っていない場合歌詞決定
-      if (
-        lyric !== '' &&
-        (appsettings.allowSameSong || !questions.includes(lyric))
-      ) {
-        questions.push(lyric);
-        break;
-      }
-    }
   }
 
+  console.log(
+    questions.map((question, index) => ({
+      question: question,
+      correctAnswer: correctAnswers[index],
+      choices: choices[index],
+      mvId: mvIdList[index],
+    }))
+  );
   // 戻り値作成
   return questions.map((question, index) => ({
     question: question,
