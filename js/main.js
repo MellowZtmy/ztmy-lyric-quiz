@@ -66,11 +66,6 @@ $(document).ready(async function () {
       removeLocal('colorIndex');
     }
 
-    // ゲームモード取得
-    currentGameMode = new URL(window.location.href).searchParams.get(
-      'gameMode'
-    );
-
     // 5. 開始画面を表示
     createDisplay(display.TOP);
 
@@ -83,7 +78,7 @@ $(document).ready(async function () {
 });
 
 // 2. クイズ読込
-function loadQuiz(isInit = false) {
+function loadQuiz(isInit, gameMode) {
   try {
     // 再開の場合
     if (isInit) {
@@ -91,6 +86,8 @@ function loadQuiz(isInit = false) {
       currentQuizIndex = 0;
       // 結果初期化
       selectedList = [];
+      // ゲームモード保持
+      currentGameMode = gameMode;
       // クイズ作成
       quizzes = createQuizzes();
     }
@@ -227,7 +224,42 @@ function createQuizzes() {
 
     // 選択肢作成
     choices[i] = [];
-    if (currentGameMode === gameMode.URA) {
+    if (currentGameMode === gameMode.OMOTE) {
+      // 歌詞から曲を当てる（元のモード）
+      choices[i][0] = song;
+
+      for (let j = 1; j < choiceLength; j++) {
+        while (true) {
+          const wrongSongIndex = getRamdomNumber(songs.length);
+          const wrongSong = songs[wrongSongIndex];
+          if (wrongSong !== '' && !choices[i].includes(wrongSong)) {
+            choices[i][j] = wrongSong;
+            break;
+          }
+        }
+      }
+
+      choices[i] = shuffle(choices[i]);
+      correctAnswers.push(choices[i].indexOf(song));
+
+      // 3. 問題文歌詞作成
+      while (true) {
+        // 乱数生成し、問題文の歌詞を設定
+        const lyricsIndex = getRamdomNumber(lyrics.length);
+
+        // 歌詞取得
+        const lyric = lyrics[lyricsIndex][songIndex];
+
+        // 問題文が取得でき、被っていない場合歌詞決定
+        if (
+          lyric !== '' &&
+          (appsettings.allowSameSong || !questions.includes(lyric))
+        ) {
+          questions.push(lyric); // 問題文に歌詞を使う
+          break;
+        }
+      }
+    } else if (currentGameMode === gameMode.URA) {
       // 曲から歌詞を当てる
       // 正解の歌詞
       let correctLyric = '';
@@ -267,41 +299,6 @@ function createQuizzes() {
       choices[i] = shuffle(choices[i]);
       correctAnswers.push(choices[i].indexOf(correctLyric));
       questions.push(song); // 問題文には曲名を使う
-    } else {
-      // 歌詞から曲を当てる（元のモード）
-      choices[i][0] = song;
-
-      for (let j = 1; j < choiceLength; j++) {
-        while (true) {
-          const wrongSongIndex = getRamdomNumber(songs.length);
-          const wrongSong = songs[wrongSongIndex];
-          if (wrongSong !== '' && !choices[i].includes(wrongSong)) {
-            choices[i][j] = wrongSong;
-            break;
-          }
-        }
-      }
-
-      choices[i] = shuffle(choices[i]);
-      correctAnswers.push(choices[i].indexOf(song));
-
-      // 3. 問題文歌詞作成
-      while (true) {
-        // 乱数生成し、問題文の歌詞を設定
-        const lyricsIndex = getRamdomNumber(lyrics.length);
-
-        // 歌詞取得
-        const lyric = lyrics[lyricsIndex][songIndex];
-
-        // 問題文が取得でき、被っていない場合歌詞決定
-        if (
-          lyric !== '' &&
-          (appsettings.allowSameSong || !questions.includes(lyric))
-        ) {
-          questions.push(lyric); // 問題文に歌詞を使う
-          break;
-        }
-      }
     }
   }
 
@@ -380,12 +377,20 @@ function createDisplay(mode) {
       ' <h2 class="center-text margin-top-20" id="songCount">' +
       selectedSongIndex.length +
       ' Songs</h2>';
+    // STARTボタン
     tag += '<button id="start"';
-    tag += '  onclick="loadQuiz(true)"';
+    tag += '  onclick="loadQuiz(true, gameMode.OMOTE)"';
     tag += '  class="btn btn--main btn--radius btn--cubic bottom-button"';
     tag += '>';
     tag += '  START';
     tag += '</button>';
+    // // ウラ STARTボタン
+    // tag += '<button id="uraStart"';
+    // tag += '  onclick="loadQuiz(true, gameMode.URA)"';
+    // tag += '  class="btn btn--main btn--radius btn--cubic bottom-button"';
+    // tag += '>';
+    // tag += ' ウラ START';
+    // tag += '</button>';
     tag +=
       ' <h2 id="changeColor" class="center-text margin-top-20" onclick="changeColor(1)">Color ↺</h2>';
     tag += ' </div>';
@@ -440,7 +445,7 @@ function createDisplay(mode) {
     tag += ' ';
     tag += ' <!-- 次へ / 終了 ボタン -->';
     tag += quizzes[currentQuizIndex + 1]
-      ? '   <button id="next" onclick="loadQuiz()" class="btn btn--main btn--radius btn--cubic visibility-hidden">NEXT→</button>'
+      ? '   <button id="next" onclick="loadQuiz(false, currentGameMode)" class="btn btn--main btn--radius btn--cubic visibility-hidden">NEXT→</button>'
       : '   <button id="result" onclick="showResult()" class="btn btn--main btn--radius btn--cubic visibility-hidden">RESULT</button>';
     // MV表示
     tag += '    <!--MV Youtube--> ';
