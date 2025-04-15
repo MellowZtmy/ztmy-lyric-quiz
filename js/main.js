@@ -577,8 +577,8 @@ function createDisplay(mode) {
       tag +=
         ' <button id="retry" onclick="createDisplay(display.TOP)" class="btn btn--main btn--radius btn--cubic">RETRY</button>';
 
-      // ハイスコア設定
-      if (getLocal('ztmyLyricQuizHighScore') ?? 0 < correctCount) {
+      // ハイスコア設定(「??」は「<」より優先度が低いのでカッコをつける
+      if ((Number(getLocal('ztmyLyricQuizHighScore')) ?? 0) < correctCount) {
         setLocal('ztmyLyricQuizHighScore', correctCount);
       }
     }
