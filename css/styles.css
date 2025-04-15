@@ -151,3 +151,20 @@ input[type=radio] {
   height: 100%; /* 高さを全体に広げる */
   pointer-events: none; /* 他の要素の操作を妨げないようにする */
 }
+
+/* スピナー */
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 5px solid #e0e0e0;      /* 全体の薄いグレー */
+  border-top: 5px solid #888888;  /* 回転部分：濃いグレー */
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 100px auto;
+  display: none;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
