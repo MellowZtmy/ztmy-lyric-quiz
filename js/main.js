@@ -321,215 +321,47 @@ function createQuizzes() {
 
 // 画面タグ作成
 function createDisplay(mode) {
-  try {
-    // スピナーを表示
-    $('#spinner').show();
+  // まずスピナーを表示
+  $('#spinner').show();
 
-    // タグクリア
-    $('#display').empty();
+  // 少し待ってから処理を開始（スピナー表示のため、DOM描画を反映させるため）
+  setTimeout(() => {
+    try {
+      // タグクリア
+      $('#display').empty();
 
-    // 変数初期化
-    var tag = '';
+      // 変数初期化
+      var tag = '';
 
-    // タグ作成
-    if (mode === display.TOP) {
-      // 選択中アルバム設定
-      selectedAlbums = getLocalArray('selectedAlbums');
-      selectedMinialbums = getLocalArray('selectedMinialbums');
-      // アルバム、ミニアルバムリストより出題する曲リスト取得
-      selectedSongIndex = getSelectedSongIndex();
+      // タグ作成
+      if (mode === display.TOP) {
+        // 選択中アルバム設定
+        selectedAlbums = getLocalArray('selectedAlbums');
+        selectedMinialbums = getLocalArray('selectedMinialbums');
+        // アルバム、ミニアルバムリストより出題する曲リスト取得
+        selectedSongIndex = getSelectedSongIndex();
 
-      // ハイスコア表示
-      tag +=
-        ' <p class="right-text">High Score : ' +
-        (getLocal('ztmyLyricQuizHighScore') ?? '-') +
-        '</p>';
-
-      // // モード選択
-      // tag += ' <h2 class="h2-display">Mode</h2>';
-      // tag += '  <label class="radioItem">';
-      // tag +=
-      //   '    <input type="radio" name="radio" value="選択肢1" class="radioButton" checked />';
-      // tag += '    選択肢1';
-      // tag += '  </label>';
-      // tag += '  <label class="radioItem">';
-      // tag +=
-      //   '    <input type="radio" name="radio" value="選択肢2" class="radioButton" />';
-      // tag += '    選択肢2';
-      // tag += '  </label>';
-
-      tag += ' <h2 class="h2-display">Albums</h2>';
-      albums.forEach(function (album, index) {
+        // ハイスコア表示
         tag +=
-          ' <img src="' +
-          appsettings.albumImagePath +
-          +(index + 1) +
-          '_' +
-          album +
-          '.jpg" id="' +
-          album +
-          '" name="album" alt="' +
-          album +
-          '" class="album' +
-          (selectedAlbums.includes(album) ? '' : ' darkened') +
-          '" onclick="clickAlbum(this)">';
-      });
+          ' <p class="right-text">High Score : ' +
+          (getLocal('ztmyLyricQuizHighScore') ?? '-') +
+          '</p>';
 
-      tag += ' <h2 class="h2-display">Minialbums</h2>';
-      minialbums.forEach(function (album, index) {
-        tag +=
-          ' <img src="' +
-          appsettings.minialbumImagePath +
-          (index + 1) +
-          '_' +
-          album +
-          '.jpg" id="' +
-          album +
-          '" name="minialbum" alt="' +
-          album +
-          '" class="album' +
-          (selectedMinialbums.includes(album) ? '' : ' darkened') +
-          '" onclick="clickAlbum(this)">';
-      });
-      tag +=
-        ' <h2 class="center-text margin-top-20" id="songCount">' +
-        selectedSongIndex.length +
-        ' Songs</h2>';
-      // STARTボタン
-      tag += '<button id="start"';
-      tag += '  onclick="loadQuiz(true, gameMode.OMOTE)"';
-      tag += '  class="btn btn--main btn--radius btn--cubic bottom-button"';
-      tag += '>';
-      tag += '  START';
-      tag += '</button>';
-      tag +=
-        ' <h2 id="changeColor" class="center-text margin-top-20" onclick="changeColor(1)">Color ↺</h2>';
-      tag += ' </div>';
+        // // モード選択
+        // tag += ' <h2 class="h2-display">Mode</h2>';
+        // tag += '  <label class="radioItem">';
+        // tag +=
+        //   '    <input type="radio" name="radio" value="選択肢1" class="radioButton" checked />';
+        // tag += '    選択肢1';
+        // tag += '  </label>';
+        // tag += '  <label class="radioItem">';
+        // tag +=
+        //   '    <input type="radio" name="radio" value="選択肢2" class="radioButton" />';
+        // tag += '    選択肢2';
+        // tag += '  </label>';
 
-      // 紙吹雪解除
-      $('canvas')?.remove();
-
-      // 一番上にスクロール
-      window.scrollTo({
-        top: 0,
-      });
-    } else if (mode === display.QUIZ) {
-      // QUIZ画面の場合
-      var quiz = quizzes[currentQuizIndex];
-      tag += ' ';
-      tag += ' <!-- 問題番号 -->';
-      tag +=
-        ' <h2 class="h2-display">Question. ' +
-        (currentQuizIndex + 1) +
-        ' / ' +
-        quizzes.length +
-        '</h2>';
-      tag += ' ';
-      tag += ' <!-- 問題文 -->';
-      tag += ' <p class="font-one-point-five">『' + quiz.question + '』</p>';
-      tag += ' ';
-      tag += ' <!-- 選択肢のラジオボタン + ラベル -->';
-      quiz.choices.forEach((choice, index) => {
-        tag += '   <label';
-        tag += '     class="choice-radio-label"';
-        tag += '   >';
-        tag += '     <input';
-        tag += '       type="radio"';
-        tag += '       id="choice' + index + '"';
-        tag += '       value="' + index + '"';
-        tag += '       name="choices"';
-        tag += '       onchange="onSelect(' + index + ')"';
-        tag += '     >';
-        tag += '     <span class="left-text">';
-        tag += '     ' + choice;
-        tag += '     </span>';
-        tag +=
-          '     <span id="marubatu' +
-          index +
-          '" class="right-text bold-text font-one-point-five">';
-        tag += '     ';
-        tag += '     </span>';
-        tag += '   </label>';
-        tag += ' ';
-      });
-
-      tag += ' ';
-      tag += ' <!-- 次へ / 終了 ボタン -->';
-      tag += quizzes[currentQuizIndex + 1]
-        ? '   <button id="next" onclick="loadQuiz(false, currentGameMode)" class="btn btn--main btn--radius btn--cubic visibility-hidden">NEXT→</button>'
-        : '   <button id="result" onclick="showResult()" class="btn btn--main btn--radius btn--cubic visibility-hidden">RESULT</button>';
-      // MV表示
-      tag += '    <!--MV Youtube--> ';
-      tag += '    <div class="margin-top-20" id="mv" hidden> ';
-      tag +=
-        '      <div style="position: relative; width: 100%; padding-bottom: 56.25%"> ';
-      tag += '        <div ';
-      tag += '          style=" ';
-      tag += '            position: absolute; ';
-      tag += '            top: 0px; ';
-      tag += '            left: 0px; ';
-      tag += '            width: 100%; ';
-      tag += '            height: 100%; ';
-      tag += '          " ';
-      tag += '        > ';
-      tag += '          <iframe ';
-      tag +=
-        '            src="https://www.youtube.com/embed/' +
-        quiz.mvId +
-        '?loop=1&playlist=' +
-        quiz.mvId +
-        '" ';
-      tag += '            frameborder="0" ';
-      tag += '            width="100%" ';
-      tag += '            height="100%"  style="border-radius: 15px;"';
-      tag += '            allowfullscreen="" ';
-      tag += '          ></iframe> ';
-      tag += '        </div> ';
-      tag += '      </div> ';
-      tag += '    </div> ';
-    } else if (mode === display.RESULT) {
-      // 問題数取得
-      var quizzesLength = quizzes.length;
-      // 正解数取得
-      var correctCount = selectedList.filter(
-        (value, index) => value === quizzes[index].correctAnswer
-      ).length;
-      // RESULT画面
-      // 正解数表示
-      tag +=
-        ' <h2 class="center-text' +
-        (correctCount === quizzesLength ? ' text-correct' : '') +
-        '">' +
-        correctCount +
-        ' / ' +
-        quizzesLength +
-        '</h2>';
-      tag +=
-        correctCount === quizzesLength
-          ? '<h2 class="center-text text-correct">PERFECT!!</h2>'
-          : '';
-      // Result表示
-      tag += ' <h2 class="h2-display">Result</h2>';
-      quizzes.forEach((quiz, index) => {
-        tag +=
-          ' <div class="font-one-point-two">Q' +
-          (index + 1) +
-          '. ' +
-          quiz.question +
-          '</div>';
-        tag +=
-          ' <div class="font-one-point-two right-text ' +
-          (selectedList[index] === quiz.correctAnswer ? 'text-correct' : '') +
-          '">' +
-          quiz.choices[quiz.correctAnswer] +
-          '</div>';
-        tag += index === quizzes.length - 1 ? '' : '<br>';
-      });
-      // アルバム表示
-      tag +=
-        selectedAlbums.length > 0 ? ' <h2 class="h2-display">Albums</h2>' : '';
-      albums.forEach(function (album, index) {
-        if (selectedAlbums.includes(album)) {
+        tag += ' <h2 class="h2-display">Albums</h2>';
+        albums.forEach(function (album, index) {
           tag +=
             ' <img src="' +
             appsettings.albumImagePath +
@@ -540,16 +372,13 @@ function createDisplay(mode) {
             album +
             '" name="album" alt="' +
             album +
-            '" class="album">';
-        }
-      });
+            '" class="album' +
+            (selectedAlbums.includes(album) ? '' : ' darkened') +
+            '" onclick="clickAlbum(this)">';
+        });
 
-      tag +=
-        selectedMinialbums.length > 0
-          ? '<h2 class="h2-display">Minialbums</h2>'
-          : '';
-      minialbums.forEach(function (album, index) {
-        if (selectedMinialbums.includes(album)) {
+        tag += ' <h2 class="h2-display">Minialbums</h2>';
+        minialbums.forEach(function (album, index) {
           tag +=
             ' <img src="' +
             appsettings.minialbumImagePath +
@@ -560,36 +389,212 @@ function createDisplay(mode) {
             album +
             '" name="minialbum" alt="' +
             album +
-            '" class="album">';
-        }
-      });
-
-      // 全問正解の場合紙吹雪、ひとこと
-      if (correctCount === quizzesLength) {
-        tag += '<h2 class="h2-display font-one-point-two">ひとこと</h2>';
+            '" class="album' +
+            (selectedMinialbums.includes(album) ? '' : ' darkened') +
+            '" onclick="clickAlbum(this)">';
+        });
         tag +=
-          '<div class="font-one-point-two">' +
-          acaneWords[0][getRamdomNumber(acaneWords[0].length)] +
-          '</div>';
-        $('#confetti').prepend('<canvas></canvas>');
-        dispConfetti();
-      }
-      tag +=
-        ' <button id="retry" onclick="createDisplay(display.TOP)" class="btn btn--main btn--radius btn--cubic">RETRY</button>';
+          ' <h2 class="center-text margin-top-20" id="songCount">' +
+          selectedSongIndex.length +
+          ' Songs</h2>';
+        // STARTボタン
+        tag += '<button id="start"';
+        tag += '  onclick="loadQuiz(true, gameMode.OMOTE)"';
+        tag += '  class="btn btn--main btn--radius btn--cubic bottom-button"';
+        tag += '>';
+        tag += '  START';
+        tag += '</button>';
+        tag +=
+          ' <h2 id="changeColor" class="center-text margin-top-20" onclick="changeColor(1)">Color ↺</h2>';
+        tag += ' </div>';
 
-      // ハイスコア設定(「??」は「<」より優先度が低いのでカッコをつける
-      if ((Number(getLocal('ztmyLyricQuizHighScore')) ?? 0) < correctCount) {
-        setLocal('ztmyLyricQuizHighScore', correctCount);
+        // 紙吹雪解除
+        $('canvas')?.remove();
+
+        // 一番上にスクロール
+        window.scrollTo({
+          top: 0,
+        });
+      } else if (mode === display.QUIZ) {
+        // QUIZ画面の場合
+        var quiz = quizzes[currentQuizIndex];
+        tag += ' ';
+        tag += ' <!-- 問題番号 -->';
+        tag +=
+          ' <h2 class="h2-display">Question. ' +
+          (currentQuizIndex + 1) +
+          ' / ' +
+          quizzes.length +
+          '</h2>';
+        tag += ' ';
+        tag += ' <!-- 問題文 -->';
+        tag += ' <p class="font-one-point-five">『' + quiz.question + '』</p>';
+        tag += ' ';
+        tag += ' <!-- 選択肢のラジオボタン + ラベル -->';
+        quiz.choices.forEach((choice, index) => {
+          tag += '   <label';
+          tag += '     class="choice-radio-label"';
+          tag += '   >';
+          tag += '     <input';
+          tag += '       type="radio"';
+          tag += '       id="choice' + index + '"';
+          tag += '       value="' + index + '"';
+          tag += '       name="choices"';
+          tag += '       onchange="onSelect(' + index + ')"';
+          tag += '     >';
+          tag += '     <span class="left-text">';
+          tag += '     ' + choice;
+          tag += '     </span>';
+          tag +=
+            '     <span id="marubatu' +
+            index +
+            '" class="right-text bold-text font-one-point-five">';
+          tag += '     ';
+          tag += '     </span>';
+          tag += '   </label>';
+          tag += ' ';
+        });
+
+        tag += ' ';
+        tag += ' <!-- 次へ / 終了 ボタン -->';
+        tag += quizzes[currentQuizIndex + 1]
+          ? '   <button id="next" onclick="loadQuiz(false, currentGameMode)" class="btn btn--main btn--radius btn--cubic visibility-hidden">NEXT→</button>'
+          : '   <button id="result" onclick="showResult()" class="btn btn--main btn--radius btn--cubic visibility-hidden">RESULT</button>';
+        // MV表示
+        tag += '    <!--MV Youtube--> ';
+        tag += '    <div class="margin-top-20" id="mv" hidden> ';
+        tag +=
+          '      <div style="position: relative; width: 100%; padding-bottom: 56.25%"> ';
+        tag += '        <div ';
+        tag += '          style=" ';
+        tag += '            position: absolute; ';
+        tag += '            top: 0px; ';
+        tag += '            left: 0px; ';
+        tag += '            width: 100%; ';
+        tag += '            height: 100%; ';
+        tag += '          " ';
+        tag += '        > ';
+        tag += '          <iframe ';
+        tag +=
+          '            src="https://www.youtube.com/embed/' +
+          quiz.mvId +
+          '?loop=1&playlist=' +
+          quiz.mvId +
+          '" ';
+        tag += '            frameborder="0" ';
+        tag += '            width="100%" ';
+        tag += '            height="100%"  style="border-radius: 15px;"';
+        tag += '            allowfullscreen="" ';
+        tag += '          ></iframe> ';
+        tag += '        </div> ';
+        tag += '      </div> ';
+        tag += '    </div> ';
+      } else if (mode === display.RESULT) {
+        // 問題数取得
+        var quizzesLength = quizzes.length;
+        // 正解数取得
+        var correctCount = selectedList.filter(
+          (value, index) => value === quizzes[index].correctAnswer
+        ).length;
+        // RESULT画面
+        // 正解数表示
+        tag +=
+          ' <h2 class="center-text' +
+          (correctCount === quizzesLength ? ' text-correct' : '') +
+          '">' +
+          correctCount +
+          ' / ' +
+          quizzesLength +
+          '</h2>';
+        tag +=
+          correctCount === quizzesLength
+            ? '<h2 class="center-text text-correct">PERFECT!!</h2>'
+            : '';
+        // Result表示
+        tag += ' <h2 class="h2-display">Result</h2>';
+        quizzes.forEach((quiz, index) => {
+          tag +=
+            ' <div class="font-one-point-two">Q' +
+            (index + 1) +
+            '. ' +
+            quiz.question +
+            '</div>';
+          tag +=
+            ' <div class="font-one-point-two right-text ' +
+            (selectedList[index] === quiz.correctAnswer ? 'text-correct' : '') +
+            '">' +
+            quiz.choices[quiz.correctAnswer] +
+            '</div>';
+          tag += index === quizzes.length - 1 ? '' : '<br>';
+        });
+        // アルバム表示
+        tag +=
+          selectedAlbums.length > 0
+            ? ' <h2 class="h2-display">Albums</h2>'
+            : '';
+        albums.forEach(function (album, index) {
+          if (selectedAlbums.includes(album)) {
+            tag +=
+              ' <img src="' +
+              appsettings.albumImagePath +
+              +(index + 1) +
+              '_' +
+              album +
+              '.jpg" id="' +
+              album +
+              '" name="album" alt="' +
+              album +
+              '" class="album">';
+          }
+        });
+
+        tag +=
+          selectedMinialbums.length > 0
+            ? '<h2 class="h2-display">Minialbums</h2>'
+            : '';
+        minialbums.forEach(function (album, index) {
+          if (selectedMinialbums.includes(album)) {
+            tag +=
+              ' <img src="' +
+              appsettings.minialbumImagePath +
+              (index + 1) +
+              '_' +
+              album +
+              '.jpg" id="' +
+              album +
+              '" name="minialbum" alt="' +
+              album +
+              '" class="album">';
+          }
+        });
+
+        // 全問正解の場合紙吹雪、ひとこと
+        if (correctCount === quizzesLength) {
+          tag += '<h2 class="h2-display font-one-point-two">ひとこと</h2>';
+          tag +=
+            '<div class="font-one-point-two">' +
+            acaneWords[0][getRamdomNumber(acaneWords[0].length)] +
+            '</div>';
+          $('#confetti').prepend('<canvas></canvas>');
+          dispConfetti();
+        }
+        tag +=
+          ' <button id="retry" onclick="createDisplay(display.TOP)" class="btn btn--main btn--radius btn--cubic">RETRY</button>';
+
+        // ハイスコア設定(「??」は「<」より優先度が低いのでカッコをつける
+        if ((Number(getLocal('ztmyLyricQuizHighScore')) ?? 0) < correctCount) {
+          setLocal('ztmyLyricQuizHighScore', correctCount);
+        }
       }
+
+      // タグ流し込み
+      $('#display').append(tag);
+
+      // CSS適用
+      changeColor(0);
+    } finally {
+      // 最後にスピナーを非表示
+      $('#spinner').hide();
     }
-
-    // タグ流し込み
-    $('#display').append(tag);
-
-    // CSS適用
-    changeColor(0);
-  } finally {
-    // 最後にスピナーを非表示
-    $('#spinner').hide();
-  }
+  }, 0); // 0ms で「次のイベントループ」で処理実行（レンダリング保証）
 }
