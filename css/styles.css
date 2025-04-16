@@ -175,7 +175,7 @@ input[type=radio] {
 
 /* モード選択 */
 .quiz-mode-container {
-  display: none;
+  display: none; /*  TODO flex */
   justify-content: left;
   gap: 20px;
   margin: 20px 0;
