@@ -9,8 +9,8 @@ const display = {
 };
 // ゲームモード
 const gameMode = {
-  OMOTE: '1',
-  URA: '2',
+  LYRIC_TO_SONG: '1',
+  SONG_TO_LYRIC: '2',
 };
 // 設定ファイル情報
 var appsettings = [];
@@ -224,7 +224,7 @@ function createQuizzes() {
 
     // 選択肢作成
     choices[i] = [];
-    if (currentGameMode === gameMode.OMOTE) {
+    if (currentGameMode === gameMode.LYRIC_TO_SONG) {
       // 歌詞から曲を当てる（元のモード）
       choices[i][0] = song;
 
@@ -259,7 +259,7 @@ function createQuizzes() {
           break;
         }
       }
-    } else if (currentGameMode === gameMode.URA) {
+    } else if (currentGameMode === gameMode.SONG_TO_LYRIC) {
       // 曲から歌詞を当てる
       // 正解の歌詞
       let correctLyric = '';
@@ -399,7 +399,7 @@ function createDisplay(mode) {
           ' Songs</h2>';
         // STARTボタン
         tag += '<button id="start"';
-        tag += '  onclick="loadQuiz(true, gameMode.OMOTE)"';
+        tag += '  onclick="loadQuiz(true, gameMode.LYRIC_TO_SONG)"';
         tag += '  class="btn btn--main btn--radius btn--cubic bottom-button"';
         tag += '>';
         tag += '  START';
