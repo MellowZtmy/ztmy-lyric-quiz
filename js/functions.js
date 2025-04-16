@@ -126,6 +126,7 @@ function changeColor(plusCount) {
   // 今のカラーインデックスを取得し、次のインデックス設定（ない場合最新のもの）
   var colorIndex =
     Number(getLocal('colorIndex') ?? colorSets.length - 1) + plusCount;
+
   // 設定するカラーを設定（ない場合最初に戻る）
   var colorSet = colorSets[colorIndex] ?? colorSets[0];
   $('body').css({
@@ -136,6 +137,36 @@ function changeColor(plusCount) {
     'background-color': colorSet[3],
     color: colorSet[4],
   });
+
+  // ★ ラジオボタン選択スタイルの更新
+  // すべてのラベルのスタイルを一度リセット（←これ大事）
+  $('.quizModeRadio').removeAttr('style');
+  // チェックされたラジオのID取得
+  const checkedId = $('input[name="quizMode"]:checked').attr('id');
+  // チェックされたラジオに対応するラベルだけにスタイル適用
+  $('label[for="' + checkedId + '"]').css({
+    'background-color': colorSet[3],
+    color: colorSet[4],
+    'border-color': colorSet[3],
+  });
+
+  // ★ ラジオボタン選択スタイルの仕込み(選択中のカラーになるよう関数再設定)
+  $('input[name="quizMode"]').on('change', function () {
+    // ラベルをリセット
+    $('.quizModeRadio').removeAttr('style');
+    // チェックされたラジオのID取得
+    const checkedId = $('input[name="quizMode"]:checked').attr('id');
+    // 対応するラベルにスタイル付与
+    $('label[for="' + checkedId + '"]').css({
+      'background-color': colorSet[3],
+      color: colorSet[4],
+      'border-color': colorSet[3],
+    });
+
+    // ローカルストレージにセット
+    setLocal('gameMode', $('input[name="quizMode"]:checked').val());
+  });
+
   // 今のカラー設定をローカルストレージに保存
   var colorIndexNow = colorSets[colorIndex] ? colorIndex : 0;
   setLocal('colorIndex', colorIndexNow);

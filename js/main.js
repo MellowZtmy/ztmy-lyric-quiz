@@ -36,8 +36,6 @@ var quizzes = [];
 var currentQuizIndex;
 // クイズ結果
 var selectedList = [];
-// 現在のゲームモード
-var currentGameMode = '';
 
 /**
  * 【イベント処理】
@@ -78,7 +76,7 @@ $(document).ready(async function () {
 });
 
 // 2. クイズ読込
-function loadQuiz(isInit, gameMode) {
+function loadQuiz(isInit) {
   try {
     // 再開の場合
     if (isInit) {
@@ -86,8 +84,6 @@ function loadQuiz(isInit, gameMode) {
       currentQuizIndex = 0;
       // 結果初期化
       selectedList = [];
-      // ゲームモード保持
-      currentGameMode = gameMode;
       // クイズ作成
       quizzes = createQuizzes();
     }
@@ -156,6 +152,8 @@ function showResult() {
  */
 // クイズ作成
 function createQuizzes() {
+  // ゲームモード取得
+  const currentGameMode = $('input[name="quizMode"]:checked').val();
   // 選択アルバムの曲名取得
   const songs = csvData[appsettings.songNameLine].filter((_, index) =>
     selectedSongIndex.includes(index)
@@ -185,7 +183,10 @@ function createQuizzes() {
     );
   }
   if (songs.length < choiceLength) {
-    throw new Error('1つ以上選んでね');
+    throw new Error('アルバムを1つ以上選んでね');
+  }
+  if (!currentGameMode) {
+    throw new Error('モードを選んでね');
   }
 
   // 各変数初期化
@@ -347,19 +348,36 @@ function createDisplay(mode) {
           (getLocal('ztmyLyricQuizHighScore') ?? '-') +
           '</p>';
 
-        // // モード選択
-        // tag += ' <h2 class="h2-display">Mode</h2>';
-        // tag += '  <label class="radioItem">';
-        // tag +=
-        //   '    <input type="radio" name="radio" value="選択肢1" class="radioButton" checked />';
-        // tag += '    選択肢1';
-        // tag += '  </label>';
-        // tag += '  <label class="radioItem">';
-        // tag +=
-        //   '    <input type="radio" name="radio" value="選択肢2" class="radioButton" />';
-        // tag += '    選択肢2';
-        // tag += '  </label>';
+        // モード選択
+        tag += ' <h2 class="h2-display" hidden>Mode</h2>';
+        tag += ' <div class="quiz-mode-container">';
+        for (const [key, value] of Object.entries(gameMode)) {
+          tag +=
+            '   <input type="radio" id="' +
+            key +
+            '" name="quizMode" value="' +
+            value +
+            '" hidden ' +
+            (getLocal('gameMode')
+              ? value === getLocal('gameMode') //ローカルストレージにゲームモードがある場合
+                ? 'checked'
+                : ''
+              : value === gameMode.LYRIC_TO_SONG //ローカルストレージにゲームモードがない場合
+              ? 'checked'
+              : '') +
+            '>';
+          tag +=
+            '   <label for="' +
+            key +
+            '" class="quizModeRadio">' +
+            key +
+            '</label>';
+        }
+        tag += ' </div>';
+        // 今のゲームモードをローカルストレージにセット
+        setLocal('gameMode', getLocal('gameMode') ?? gameMode.LYRIC_TO_SONG);
 
+        // アルバム
         tag += ' <h2 class="h2-display">Albums</h2>';
         albums.forEach(function (album, index) {
           tag +=
@@ -377,6 +395,7 @@ function createDisplay(mode) {
             '" onclick="clickAlbum(this)">';
         });
 
+        // ミニアルバム
         tag += ' <h2 class="h2-display">Minialbums</h2>';
         minialbums.forEach(function (album, index) {
           tag +=
@@ -399,18 +418,11 @@ function createDisplay(mode) {
           ' Songs</h2>';
         // STARTボタン
         tag += '<button id="start"';
-        tag += '  onclick="loadQuiz(true, gameMode.LYRIC_TO_SONG)"';
+        tag += '  onclick="loadQuiz(true)"';
         tag += '  class="btn btn--main btn--radius btn--cubic bottom-button"';
         tag += '>';
         tag += '  START';
         tag += '</button>';
-        // // ウラ STARTボタン
-        // tag += '<button id="uraStart"';
-        // tag += '  onclick="loadQuiz(true, gameMode.SONG_TO_LYRIC)"';
-        // tag += '  class="btn btn--main btn--radius btn--cubic bottom-button"';
-        // tag += '>';
-        // tag += ' ウラ START';
-        // tag += '</button>';
         tag +=
           ' <h2 id="changeColor" class="center-text margin-top-20" onclick="changeColor(1)">Color ↺</h2>';
         tag += ' </div>';
@@ -465,7 +477,7 @@ function createDisplay(mode) {
         tag += ' ';
         tag += ' <!-- 次へ / 終了 ボタン -->';
         tag += quizzes[currentQuizIndex + 1]
-          ? '   <button id="next" onclick="loadQuiz(false, currentGameMode)" class="btn btn--main btn--radius btn--cubic visibility-hidden">NEXT→</button>'
+          ? '   <button id="next" onclick="loadQuiz(false)" class="btn btn--main btn--radius btn--cubic visibility-hidden">NEXT→</button>'
           : '   <button id="result" onclick="showResult()" class="btn btn--main btn--radius btn--cubic visibility-hidden">RESULT</button>';
         // MV表示
         tag += '    <!--MV Youtube--> ';
