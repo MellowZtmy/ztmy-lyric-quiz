@@ -10,6 +10,9 @@
 
 .left-text {
   text-align: left;
+  white-space: nowrap;       /* 改行させない */
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .right-text {

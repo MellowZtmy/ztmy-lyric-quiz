@@ -404,6 +404,13 @@ function createDisplay(mode) {
         tag += '>';
         tag += '  START';
         tag += '</button>';
+        // // ウラ STARTボタン
+        // tag += '<button id="uraStart"';
+        // tag += '  onclick="loadQuiz(true, gameMode.SONG_TO_LYRIC)"';
+        // tag += '  class="btn btn--main btn--radius btn--cubic bottom-button"';
+        // tag += '>';
+        // tag += ' ウラ START';
+        // tag += '</button>';
         tag +=
           ' <h2 id="changeColor" class="center-text margin-top-20" onclick="changeColor(1)">Color ↺</h2>';
         tag += ' </div>';
