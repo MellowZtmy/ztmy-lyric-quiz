@@ -185,7 +185,7 @@ function createQuizzes() {
     );
   }
   if (songs.length < choiceLength) {
-    throw new Error(choiceLength + '曲以上選んでね');
+    throw new Error('1つ以上選んでね');
   }
 
   // 各変数初期化
