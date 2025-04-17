@@ -351,7 +351,7 @@ function createDisplay(mode) {
           '</p>';
 
         // モード選択
-        tag += ' <h2 class="h2-display" hidden>Mode</h2>'; // TODO hiddenとる
+        tag += ' <h2 class="h2-display">Mode</h2>';
         tag += ' <div class="quiz-mode-container">';
         for (const [key, value] of Object.entries(gameMode)) {
           tag +=

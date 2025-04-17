@@ -17,7 +17,10 @@
 }
 
 .right-text {
-    text-align: right;
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .bold-text {
@@ -182,7 +185,7 @@ input[type=radio] {
 
 /* モード選択 */
 .quiz-mode-container {
-  display: none; /*  TODO flex */
+  display: flex;
   justify-content: left;
   gap: 20px;
   margin: 20px 0;
