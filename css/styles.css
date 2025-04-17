@@ -1,6 +1,7 @@
 /* テキスト用CSS */
 *{
   font-family:"ＭＳ Ｐゴシック",sans-serif;
+  transition: all 0.3s;
 }
 
 .center-text {
@@ -153,6 +154,12 @@ input[type=radio] {
   width: 100%;  /* 幅を全体に広げる */
   height: 100%; /* 高さを全体に広げる */
   pointer-events: none; /* 他の要素の操作を妨げないようにする */
+}
+
+/* 画面最大幅を設定 */
+.confetti {
+  max-width: 768px;         /* タブレットグレイ程度の最大幅 */
+  margin: 0 auto;           /* 中央揃え */
 }
 
 /* スピナー */

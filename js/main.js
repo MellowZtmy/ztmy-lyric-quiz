@@ -323,7 +323,9 @@ function createQuizzes() {
 // 画面タグ作成
 function createDisplay(mode) {
   // まずスピナーを表示
-  $('#spinner').show();
+  if (mode === display.TOP) {
+    $('#spinner').show(); // 画面がちらつくため、TOP以外の場合はスピナーは非表示にしておく
+  }
 
   // 少し待ってから処理を開始（スピナー表示のため、DOM描画を反映させるため）
   setTimeout(() => {
