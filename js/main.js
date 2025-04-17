@@ -9,8 +9,8 @@ const display = {
 };
 // ゲームモード
 const gameMode = {
-  LYRIC_TO_SONG: '1',
-  SONG_TO_LYRIC: '2',
+  LYRIC_TO_SONG: { VALUE: '1', TEXT: '歌詞から曲' },
+  SONG_TO_LYRIC: { VALUE: '2', TEXT: '曲から歌詞' },
 };
 // 設定ファイル情報
 var appsettings = [];
@@ -225,7 +225,7 @@ function createQuizzes() {
 
     // 選択肢作成
     choices[i] = [];
-    if (currentGameMode === gameMode.LYRIC_TO_SONG) {
+    if (currentGameMode === gameMode.LYRIC_TO_SONG.VALUE) {
       // 歌詞から曲を当てる（元のモード）
       choices[i][0] = song;
 
@@ -260,7 +260,7 @@ function createQuizzes() {
           break;
         }
       }
-    } else if (currentGameMode === gameMode.SONG_TO_LYRIC) {
+    } else if (currentGameMode === gameMode.SONG_TO_LYRIC.VALUE) {
       // 曲から歌詞を当てる
       // 正解の歌詞
       let correctLyric = '';
@@ -353,31 +353,34 @@ function createDisplay(mode) {
         // モード選択
         tag += ' <h2 class="h2-display">Mode</h2>';
         tag += ' <div class="quiz-mode-container">';
-        for (const [key, value] of Object.entries(gameMode)) {
+        for (const [modeKey, modeData] of Object.entries(gameMode)) {
           tag +=
             '   <input type="radio" id="' +
-            key +
+            modeKey +
             '" name="quizMode" value="' +
-            value +
+            modeData.VALUE +
             '" hidden ' +
             (getLocal('gameMode')
-              ? value === getLocal('gameMode') //ローカルストレージにゲームモードがある場合
+              ? modeData.VALUE === getLocal('gameMode') // ローカルストレージにゲームモードがある場合
                 ? 'checked'
                 : ''
-              : value === gameMode.LYRIC_TO_SONG //ローカルストレージにゲームモードがない場合
+              : modeData.VALUE === gameMode.LYRIC_TO_SONG.VALUE // ローカルストレージにゲームモードがない場合
               ? 'checked'
               : '') +
             '>';
           tag +=
             '   <label for="' +
-            key +
+            modeKey +
             '" class="quizModeRadio">' +
-            key +
+            modeData.TEXT +
             '</label>';
         }
         tag += ' </div>';
         // 今のゲームモードをローカルストレージにセット
-        setLocal('gameMode', getLocal('gameMode') ?? gameMode.LYRIC_TO_SONG);
+        setLocal(
+          'gameMode',
+          getLocal('gameMode') ?? gameMode.LYRIC_TO_SONG.VALUE
+        );
 
         // アルバム
         tag += ' <h2 class="h2-display">Albums</h2>';
