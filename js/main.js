@@ -9,8 +9,8 @@ const display = {
 };
 // ゲームモード
 const gameMode = {
-  LYRIC_TO_SONG: { VALUE: '1', TEXT: '歌詞から曲' },
-  SONG_TO_LYRIC: { VALUE: '2', TEXT: '曲から歌詞' },
+  LYRIC_TO_SONG: { VALUE: '1', TEXT: '歌詞から曲名' },
+  SONG_TO_LYRIC: { VALUE: '2', TEXT: '曲名から歌詞' },
 };
 // 設定ファイル情報
 var appsettings = [];
