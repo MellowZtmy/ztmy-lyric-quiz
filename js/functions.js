@@ -147,7 +147,7 @@ function changeColor(plusCount) {
   $('label[for="' + checkedId + '"]').css({
     'background-color': colorSet[3],
     color: colorSet[4],
-    'border-color': colorSet[3],
+    // 'border-color': colorSet[3],
   });
 
   // ★ ラジオボタン選択スタイルの仕込み(選択中のカラーになるよう関数再設定)
@@ -160,7 +160,7 @@ function changeColor(plusCount) {
     $('label[for="' + checkedId + '"]').css({
       'background-color': colorSet[3],
       color: colorSet[4],
-      'border-color': colorSet[3],
+      // 'border-color': colorSet[3],
     });
 
     // ローカルストレージにセット
