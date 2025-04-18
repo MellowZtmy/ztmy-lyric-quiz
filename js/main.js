@@ -597,7 +597,7 @@ function createDisplay(mode) {
           tag += '<h2 class="h2-display font-one-point-two">ひとこと</h2>';
           tag +=
             '<div class="font-one-point-two">' +
-            acaneWords[0][getRamdomNumber(acaneWords[0].length)] +
+            acaneWords[getRamdomNumber(acaneWords.length)] +
             '</div>';
           $('#confetti').prepend('<canvas></canvas>');
           dispConfetti();
