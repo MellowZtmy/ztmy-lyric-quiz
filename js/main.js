@@ -59,16 +59,8 @@ $(document).ready(async function () {
     // 4. カラーセット読み込み
     colorSets = await fetchCsvData(appsettings.colorSetsFileName, 1);
 
-    // バージョンアップしていればカラー初期化
-    if (appsettings.version !== getLocal('version')) {
-      removeLocal('colorIndex');
-    }
-
     // 5. 開始画面を表示
     createDisplay(display.TOP);
-
-    // 6. バージョン保存
-    setLocal('version', appsettings.version);
   } catch (error) {
     // エラーハンドリング
     showError('Failed to load data:', error);
