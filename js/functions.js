@@ -48,27 +48,32 @@ function getRamdomNumber(num) {
 
 // データをローカルストレージからクリアする関数
 function removeLocal(key) {
-  localStorage.removeItem(key);
+  localStorage.removeItem(appsettings.appName + '.' + key);
 }
 
 // データをローカルストレージにセットする関数
 function setLocal(key, value) {
-  localStorage.setItem(key, value);
+  localStorage.setItem(appsettings.appName + '.' + key, value);
 }
 
 // ローカルストレージからデータをゲットする関数
 function getLocal(key) {
-  return localStorage.getItem(key);
+  return localStorage.getItem(appsettings.appName + '.' + key);
 }
 
 // ローカルストレージから配列を取得(nullは空に)
-function getLocalArray(name) {
-  return JSON.parse(localStorage.getItem(name)) ?? [];
+function getLocalArray(key) {
+  return (
+    JSON.parse(localStorage.getItem(appsettings.appName + '.' + key)) ?? []
+  );
 }
 
 // ローカルストレージに配列設定(nullは空に)
-function setLocalArray(name, array) {
-  localStorage.setItem(name, JSON.stringify(array ?? []));
+function setLocalArray(key, array) {
+  localStorage.setItem(
+    appsettings.appName + '.' + key,
+    JSON.stringify(array ?? [])
+  );
 }
 
 // エラー時処理
