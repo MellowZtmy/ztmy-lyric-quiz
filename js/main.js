@@ -444,7 +444,8 @@ function createDisplay(mode) {
           '</h2>';
         tag += ' ';
         tag += ' <!-- 問題文 -->';
-        tag += ' <p class="font-one-point-five">『' + quiz.question + '』</p>';
+        tag +=
+          ' <p class="font-one-point-five reveal">' + quiz.question + '</p>';
         tag += ' ';
         tag += ' <!-- 選択肢のラジオボタン + ラベル -->';
         quiz.choices.forEach((choice, index) => {
