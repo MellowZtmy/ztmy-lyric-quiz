@@ -445,7 +445,9 @@ function createDisplay(mode) {
         tag += ' ';
         tag += ' <!-- 問題文 -->';
         tag +=
-          ' <p class="font-one-point-five reveal">' + quiz.question + '</p>';
+          ' <p class="font-one-point-five reveal">『' +
+          quiz.question +
+          '』</p>';
         tag += ' ';
         tag += ' <!-- 選択肢のラジオボタン + ラベル -->';
         quiz.choices.forEach((choice, index) => {
@@ -505,6 +507,7 @@ function createDisplay(mode) {
         tag += '          ></iframe> ';
         tag += '        </div> ';
         tag += '      </div> ';
+        tag += '    <p class="right-text">より引用</p>';
         tag += '    </div> ';
       } else if (mode === display.RESULT) {
         // 問題数取得
