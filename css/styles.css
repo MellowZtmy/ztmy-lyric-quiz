@@ -212,9 +212,9 @@ input[type=radio] {
 
  /* 左から徐々に見えるようにする */
 .reveal {
-  white-space: nowrap;
+  /* white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
+  text-overflow: ellipsis; */
 
   /* アニメーション */
   animation: clip-reveal 2s ease-out forwards;
