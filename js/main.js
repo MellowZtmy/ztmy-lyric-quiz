@@ -159,6 +159,14 @@ function createQuizzes() {
   const mvIds = csvData[appsettings.mvIdLine].filter((_, index) =>
     selectedSongIndex.includes(index)
   );
+  // 曲の作曲者取得
+  const composers = csvData[appsettings.composerLine].filter((_, index) =>
+    selectedSongIndex.includes(index)
+  );
+  // 曲の作詞者取得
+  const lyricists = csvData[appsettings.lyricistLine].filter((_, index) =>
+    selectedSongIndex.includes(index)
+  );
   // 問題数取得
   const quizzesLength = songs.length;
   // 選択肢数取得
@@ -185,13 +193,19 @@ function createQuizzes() {
   // 問題歌詞リスト
   let questions = [];
   // 正解リスト
-  let answerList = []; // 正解（曲名 or 歌詞）
+  let songList = []; // 正解（曲名 or 歌詞）
   // 選択肢リスト(2次元配列)
   let choices = [[]];
   // 正解選択肢リスト
   let correctAnswers = [];
   // MVIDリスト
   let mvIdList = [];
+  // 投稿日リスト
+  let uploadedDateList = [];
+  // 作曲者リスト
+  let composerList = [];
+  // 作詞者リスト
+  let lyricistList = [];
 
   // 問題数分処理する
   for (let i = 0; i < quizzesLength; i++) {
@@ -206,11 +220,15 @@ function createQuizzes() {
       song = songs[songIndex];
 
       // 曲名が取得でき被っていない場合正解曲決定
-      if (song !== '' && !answerList.includes(song)) {
+      if (song !== '' && !songList.includes(song)) {
         // 正解の曲リストに曲追加
-        answerList.push(song); // 歌詞モードでもベースは曲
+        songList.push(song); // 歌詞モードでもベースは曲
         // mvID追加
         mvIdList.push(mvIds[songIndex]);
+        // 作曲者追加
+        composerList.push(composers[songIndex]);
+        // 作詞者追加
+        lyricistList.push(lyricists[songIndex]);
         break;
       }
     }
@@ -295,20 +313,15 @@ function createQuizzes() {
     }
   }
 
-  console.log(
-    questions.map((question, index) => ({
-      question: question,
-      correctAnswer: correctAnswers[index],
-      choices: choices[index],
-      mvId: mvIdList[index],
-    }))
-  );
   // 戻り値作成
   return questions.map((question, index) => ({
+    song: songList[index],
     question: question,
     correctAnswer: correctAnswers[index],
     choices: choices[index],
     mvId: mvIdList[index],
+    composer: composerList[index],
+    lyricist: lyricistList[index],
   }));
 }
 
@@ -512,6 +525,8 @@ function createDisplay(mode) {
         tag += '          ></iframe> ';
         tag += '        </div> ';
         tag += '      </div> ';
+        tag += `    <p class="right-text"> ずっと真夜中でいいのに。『${quiz.song}』<br>`;
+        tag += `    （作詞 ： ${quiz.lyricist}）</p>`;
         tag += '    </div> ';
       } else if (mode === display.RESULT) {
         // 問題数取得
