@@ -525,7 +525,8 @@ function createDisplay(mode) {
         tag += '          ></iframe> ';
         tag += '        </div> ';
         tag += '      </div> ';
-        tag += `    <p class="right-text"> ずっと真夜中でいいのに。『${quiz.song}』<br>`;
+        tag += `    <p class="right-text-no-ellipsis"> ずっと真夜中でいいのに。<br>`;
+        tag += `    『${quiz.song}』<br>`;
         tag += `    （作詞 ： ${quiz.lyricist}）</p>`;
         tag += '    </div> ';
       } else if (mode === display.RESULT) {
