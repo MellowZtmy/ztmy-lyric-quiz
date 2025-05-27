@@ -452,6 +452,9 @@ function createDisplay(mode) {
       } else if (mode === display.QUIZ) {
         // QUIZ画面の場合
         var quiz = quizzes[currentQuizIndex];
+        // 『』で囲む対象の区別
+        let isgameModeLyricToSong =
+          getLocal('gameMode') === gameMode.LYRIC_TO_SONG.VALUE;
         tag += ' ';
         tag += ' <!-- 問題番号 -->';
         tag +=
@@ -462,10 +465,12 @@ function createDisplay(mode) {
           '</h2>';
         tag += ' ';
         tag += ' <!-- 問題文 -->';
-        tag +=
-          ' <p class="font-one-point-five reveal">『' +
+        tag += ` <p class="font-one-point-five reveal">
+        ${
+          (isgameModeLyricToSong ? '『' : '') +
           quiz.question +
-          '』</p>';
+          (isgameModeLyricToSong ? '』' : '')
+        }</p>`;
         tag += ' ';
         tag += ' <!-- 選択肢のラジオボタン + ラベル -->';
         quiz.choices.forEach((choice, index) => {
@@ -480,7 +485,11 @@ function createDisplay(mode) {
           tag += '       onchange="onSelect(' + index + ')"';
           tag += '     >';
           tag += '     <span class="left-text">';
-          tag += '     ' + choice;
+          tag +=
+            '     ' +
+            (isgameModeLyricToSong ? '' : '『') +
+            choice +
+            (isgameModeLyricToSong ? '' : '』');
           tag += '     </span>';
           tag +=
             '     <span id="marubatu' +
