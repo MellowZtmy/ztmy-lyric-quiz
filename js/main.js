@@ -78,6 +78,8 @@ function loadQuiz(isInit) {
       selectedList = [];
       // クイズ作成
       quizzes = createQuizzes();
+      // 一番上にスクロール
+      scrollToTop();
     }
 
     // クイズ画面を表示
@@ -446,9 +448,7 @@ function createDisplay(mode) {
         $('canvas')?.remove();
 
         // 一番上にスクロール
-        window.scrollTo({
-          top: 0,
-        });
+        scrollToTop();
       } else if (mode === display.QUIZ) {
         // QUIZ画面の場合
         var quiz = quizzes[currentQuizIndex];

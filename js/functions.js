@@ -178,3 +178,11 @@ function changeColor(plusCount) {
     'Color ↺ <br>(' + (colorIndexNow + 1) + '/' + colorSets.length + ')'
   );
 }
+
+function scrollToTop() {
+  // 一番上にスクロール
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth',
+  });
+}
