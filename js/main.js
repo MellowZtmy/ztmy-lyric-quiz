@@ -185,7 +185,7 @@ function createQuizzes() {
     );
   }
   if (songs.length < choiceLength) {
-    throw new Error('アルバムを1つ以上選んでね');
+    throw new Error('曲を5つ以上選んでね');
   }
   if (!currentGameMode) {
     throw new Error('モードを選んでね');
